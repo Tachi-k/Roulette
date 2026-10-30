@@ -40,7 +40,7 @@
 </style>
 </head>
 <body>
-<header>ルーレット<br><span class="version">Software Version 20261030-041</span></header>
+<header>ルーレット<br><span class="version">Software Version 20261030-042</span></header>
 
 <div class="app">
   <div class="card left">
@@ -63,7 +63,7 @@
         <div class="tag" id="spinTimeTag">回転：（20秒）</div>
         <div style="margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
           <span class="hint">回転時間(秒)</span>
-          <input id="spinSeconds" class="spinInput" type="number" min="20" max="40" step="1" value="20" />
+          <input id="spinSeconds" class="spinInput" type="number" min="20" max="60" step="1" value="20" />
           <label class="btn small" for="nameFile" id="nameFileLabel" style="cursor:pointer">テキストファイル読込</label>
           <input id="nameFile" type="file" accept=".txt,text/plain" style="display:none" />
           <label class="btn secondary small" for="bgmFile" id="bgmFileLabel" style="cursor:pointer">BGM変更</label>
@@ -160,7 +160,7 @@ function updateUIFromTextarea(){
 function getSpinSeconds(){
   const raw = Number(spinSecondsInput.value);
   const sec = Number.isFinite(raw) ? raw : 20;
-  const fixed = Math.round(clamp(sec, 20, 40));
+  const fixed = Math.round(clamp(sec, 20, 60));
   spinSecondsInput.value = String(fixed);
   return fixed;
 }
@@ -172,7 +172,7 @@ spinSecondsInput.addEventListener("change", syncSpinTagFromInput);
 spinSecondsInput.addEventListener("blur", syncSpinTagFromInput);
 spinSecondsInput.addEventListener("input", ()=>{
   const raw = Number(spinSecondsInput.value);
-  if(Number.isFinite(raw)) spinTimeTag.textContent = `回転：（${Math.round(clamp(raw,20,40))}秒）`;
+  if(Number.isFinite(raw)) spinTimeTag.textContent = `回転：（${Math.round(clamp(raw,20,60))}秒）`;
 });
 syncSpinTagFromInput();
 
