@@ -60,10 +60,10 @@
 
       <div class="row" style="align-items:flex-end">
         <div class="hint">参加：<span class="counter" id="count">0</span> 名（最大45）</div>
-        <div class="tag" id="spinTimeTag">回転：（20.0秒）</div>
+        <div class="tag" id="spinTimeTag">回転：（20秒）</div>
         <div style="margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
           <span class="hint">回転時間(秒)</span>
-          <input id="spinSeconds" class="spinInput" type="number" min="20" max="40" step="0.1" value="20.0" />
+          <input id="spinSeconds" class="spinInput" type="number" min="20" max="40" step="1" value="20" />
           <label class="btn small" for="nameFile" id="nameFileLabel" style="cursor:pointer">テキストファイル読込</label>
           <input id="nameFile" type="file" accept=".txt,text/plain" style="display:none" />
           <label class="btn secondary small" for="bgmFile" id="bgmFileLabel" style="cursor:pointer">BGM変更</label>
@@ -160,19 +160,19 @@ function updateUIFromTextarea(){
 function getSpinSeconds(){
   const raw = Number(spinSecondsInput.value);
   const sec = Number.isFinite(raw) ? raw : 20;
-  const fixed = clamp(sec, 20, 40);
-  spinSecondsInput.value = fixed.toFixed(1);
+  const fixed = Math.round(clamp(sec, 20, 40));
+  spinSecondsInput.value = String(fixed);
   return fixed;
 }
 function syncSpinTagFromInput(){
   const sec = getSpinSeconds();
-  spinTimeTag.textContent = `回転：（${sec.toFixed(1)}秒）`;
+  spinTimeTag.textContent = `回転：（${sec}秒）`;
 }
 spinSecondsInput.addEventListener("change", syncSpinTagFromInput);
 spinSecondsInput.addEventListener("blur", syncSpinTagFromInput);
 spinSecondsInput.addEventListener("input", ()=>{
   const raw = Number(spinSecondsInput.value);
-  if(Number.isFinite(raw)) spinTimeTag.textContent = `回転：（${clamp(raw,20,40).toFixed(1)}秒）`;
+  if(Number.isFinite(raw)) spinTimeTag.textContent = `回転：（${Math.round(clamp(raw,20,40))}秒）`;
 });
 syncSpinTagFromInput();
 
