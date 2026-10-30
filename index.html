@@ -40,7 +40,7 @@
 </style>
 </head>
 <body>
-<header>ルーレット<br><span class="version">Software Version 20261030-042</span></header>
+<header>ルーレット<br><span class="version">Software Version 20261031-043</span></header>
 
 <div class="app">
   <div class="card left">
@@ -411,7 +411,9 @@ spinBtn.addEventListener("click", async ()=>{
 
   const stopAngleCenter = stopIndex*step + step/2;
   const targetAngle = -Math.PI/2 - stopAngleCenter;
-  const extraTurns = stopPattern === 0 ? 10 + Math.floor(rng()*4) : 14 + Math.floor(rng()*4);
+  const baseTurns = stopPattern === 0 ? 10 + Math.floor(rng()*4) : 14 + Math.floor(rng()*4);
+  // Keep the 20-second rotation speed when the selected duration changes.
+  const extraTurns = baseTurns * (sec / 20);
   const startAngle = angle;
   const endAngle = computeEndAngle(startAngle, targetAngle, extraTurns);
   const easeFunc = stopPattern === 0 ? easeOutQuint : easeOutSoft;
