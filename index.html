@@ -76,7 +76,7 @@ html.halloween body{background:radial-gradient(ellipse at 12% 5%,#66323e66,trans
 </style>
 </head>
 <body>
-<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261031-049</span></header>
+<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261031-050</span></header>
 <div class="halloween-scenery" aria-hidden="true"><span class="web"></span><span class="moon"></span><span class="bat">🦇</span><span class="bat second">🦇</span></div>
 <div class="halloween-banner"><strong>一週間だけの、ちょっと不思議な抽選会。</strong><br>10.31 — 11.06 ・ HALLOWEEN EDITION</div>
 
@@ -304,6 +304,26 @@ bgm.preload = "auto";
 bgm.load();
 
 let currentWinnerAudio = null;
+let currentWinnerSource = null;
+let winnerPlaybackId = 0;
+const winnerBufferCache = new Map();
+function getWinnerSoundUrl(){
+  syncHalloweenTheme();
+  return halloweenActive ? "./halloween-jackpot-fanfare.mp3?v=20261031" : "./brass-verdict.mp3?v=20260509-040";
+}
+function loadWinnerBuffer(url){
+  if(!winnerBufferCache.has(url)){
+    const pending = fetch(url).then(response=>{
+      if(!response.ok) throw new Error("Winner sound HTTP " + response.status);
+      return response.arrayBuffer();
+    }).then(data=>audioCtx.decodeAudioData(data)).catch(error=>{
+      winnerBufferCache.delete(url);
+      throw error;
+    });
+    winnerBufferCache.set(url,pending);
+  }
+  return winnerBufferCache.get(url);
+}
 
 bgmFileInput.addEventListener("change", (e)=>{
   const file = e.target.files && e.target.files[0];
@@ -385,6 +405,11 @@ function startBgm(){
 function stopBgm(){ bgm.pause(); bgm.currentTime = 0; }
 function stopAllMusic(){
   stopBgm();
+  winnerPlaybackId++;
+  if(currentWinnerSource){
+    try{ currentWinnerSource.stop(); }catch(_){}
+    currentWinnerSource = null;
+  }
   if(currentWinnerAudio){
     currentWinnerAudio.pause();
     currentWinnerAudio.currentTime = 0;
@@ -394,13 +419,17 @@ function stopAllMusic(){
 
 let audioCtx = null, masterGain = null;
 async function ensureAudio(){
+  // Use a media playback session where supported, including iPhone silent-mode behavior.
+  try{ if(navigator.audioSession) navigator.audioSession.type = "playback"; }catch(_){}
   if(!audioCtx){
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     masterGain = audioCtx.createGain();
     masterGain.gain.value = 1.0;
     masterGain.connect(audioCtx.destination);
   }
-  if(audioCtx.state === "suspended"){ try{ await audioCtx.resume(); }catch(_){} }
+  if(audioCtx.state !== "running"){ try{ await audioCtx.resume(); }catch(_){} }
+  // The context is unlocked by the user's start tap; decode the file during rotation.
+  loadWinnerBuffer(getWinnerSoundUrl()).catch(()=>{});
 }
 function beep(freq=1100, dur=0.06, vol=0.18){
   if(!audioCtx) return;
@@ -451,20 +480,32 @@ function winJingle(){
     o.onended = ()=>{ try{o.disconnect(); g.disconnect();}catch(_){} };
   });
 }
-function playWinnerBgm(){
-  syncHalloweenTheme();
-  const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-  if(isIOS && !halloweenActive){ winJingle(); return; }
-  const winnerSource = halloweenActive
-    ? "./halloween-jackpot-fanfare.mp3?v=20261031"
-    : "./brass-verdict.mp3?v=20260509-040";
-  const winAudio = new Audio(winnerSource);
-  currentWinnerAudio = winAudio;
-  winAudio.volume = 0.9;
-  setTimeout(()=>{
-    if(currentWinnerAudio !== winAudio) return;
-    winAudio.play().catch(()=>{ winJingle(); });
-  },150);
+async function playWinnerBgm(){
+  const playbackId = ++winnerPlaybackId;
+  if(currentWinnerSource){
+    try{ currentWinnerSource.stop(); }catch(_){}
+    currentWinnerSource = null;
+  }
+  try{
+    if(!audioCtx) throw new Error("Audio is not ready");
+    const buffer = await loadWinnerBuffer(getWinnerSoundUrl());
+    if(playbackId !== winnerPlaybackId) return;
+    if(audioCtx.state !== "running") await audioCtx.resume();
+    if(playbackId !== winnerPlaybackId) return;
+    const source = audioCtx.createBufferSource();
+    const gain = audioCtx.createGain();
+    source.buffer = buffer;
+    gain.gain.value = 0.9;
+    source.connect(gain); gain.connect(masterGain);
+    currentWinnerSource = source;
+    source.onended = ()=>{
+      source.disconnect(); gain.disconnect();
+      if(currentWinnerSource === source) currentWinnerSource = null;
+    };
+    source.start();
+  }catch(error){
+    if(playbackId === winnerPlaybackId) winJingle();
+  }
 }
 
 function openWinnerOverlay(name){
