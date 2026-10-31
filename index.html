@@ -76,7 +76,7 @@ html.halloween body{background:radial-gradient(ellipse at 12% 5%,#66323e66,trans
 </style>
 </head>
 <body>
-<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261031-048</span></header>
+<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261031-049</span></header>
 <div class="halloween-scenery" aria-hidden="true"><span class="web"></span><span class="moon"></span><span class="bat">🦇</span><span class="bat second">🦇</span></div>
 <div class="halloween-banner"><strong>一週間だけの、ちょっと不思議な抽選会。</strong><br>10.31 — 11.06 ・ HALLOWEEN EDITION</div>
 
@@ -345,7 +345,7 @@ nameFileInput.addEventListener("change", (e)=>{
   e.target.value = "";
 });
 
-// Short Halloween cue; playback always ends before the spin starts.
+// Two-second Halloween cue; the spin starts after the first second.
 const thunderIntro = new Audio("./thunder-intro.mp3?v=20261031");
 thunderIntro.preload = "auto";
 thunderIntro.volume = 0.65;
@@ -358,13 +358,15 @@ function playThunderIntro(){
       if(finished) return;
       finished = true;
       clearTimeout(timer);
+      clearTimeout(spinTimer);
       thunderIntro.pause();
       thunderIntro.currentTime = 0;
       thunderIntro.onended = null;
       thunderIntro.onerror = null;
       resolve();
     };
-    const timer = setTimeout(finish, 1000);
+    const spinTimer = setTimeout(resolve, 1000);
+    const timer = setTimeout(finish, 2000);
     thunderIntro.onended = finish;
     thunderIntro.onerror = finish;
     thunderIntro.currentTime = 0;
