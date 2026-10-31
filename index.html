@@ -76,7 +76,7 @@ html.halloween body{background:radial-gradient(ellipse at 12% 5%,#66323e66,trans
 </style>
 </head>
 <body>
-<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261031-047</span></header>
+<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261031-048</span></header>
 <div class="halloween-scenery" aria-hidden="true"><span class="web"></span><span class="moon"></span><span class="bat">🦇</span><span class="bat second">🦇</span></div>
 <div class="halloween-banner"><strong>一週間だけの、ちょっと不思議な抽選会。</strong><br>10.31 — 11.06 ・ HALLOWEEN EDITION</div>
 
@@ -364,7 +364,7 @@ function playThunderIntro(){
       thunderIntro.onerror = null;
       resolve();
     };
-    const timer = setTimeout(finish, 800);
+    const timer = setTimeout(finish, 1000);
     thunderIntro.onended = finish;
     thunderIntro.onerror = finish;
     thunderIntro.currentTime = 0;
