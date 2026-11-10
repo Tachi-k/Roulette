@@ -76,7 +76,7 @@ html.halloween body{background:radial-gradient(ellipse at 12% 5%,#66323e66,trans
 </style>
 </head>
 <body>
-<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261031-050</span></header>
+<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261111-051</span></header>
 <div class="halloween-scenery" aria-hidden="true"><span class="web"></span><span class="moon"></span><span class="bat">🦇</span><span class="bat second">🦇</span></div>
 <div class="halloween-banner"><strong>一週間だけの、ちょっと不思議な抽選会。</strong><br>10.31 — 11.06 ・ HALLOWEEN EDITION</div>
 
@@ -107,7 +107,7 @@ html.halloween body{background:radial-gradient(ellipse at 12% 5%,#66323e66,trans
           <input id="nameFile" type="file" accept=".txt,text/plain" style="display:none" />
           <label class="btn secondary small" for="bgmFile" id="bgmFileLabel" style="cursor:pointer">BGM変更</label>
           <input id="bgmFile" type="file" accept="audio/*" style="display:none" />
-          <div class="hint" id="bgmName" style="width:100%;margin-top:4px">BGM：ハロウィン 気球の夢.mp3</div>
+          <div class="hint" id="bgmName" style="width:100%;margin-top:4px">BGM：tin-can-carnival.mp3</div>
         </div>
       </div>
 
@@ -296,7 +296,7 @@ function computeEndAngle(startAngle, targetAngle, extraTurns){
   return endAngle;
 }
 
-const bgm = new Audio("./halloween-kikyu-no-yume.mp3?v=20261030");
+const bgm = new Audio("./tin-can-carnival.mp3?v=20260509-040");
 let bgmObjectUrl = null;
 bgm.loop = true;
 bgm.volume = 0.45;
