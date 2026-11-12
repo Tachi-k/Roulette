@@ -109,16 +109,16 @@ html.winter{--bg:#35627f;--accent:#d8f7ff;background:#35627f}
 @media(max-width:600px){.winter header{font-size:23px;padding-top:20px}.winter .left{padding:10px}.winter .winter-banner{font-size:11px;letter-spacing:.06em}}
 
 /* Crystal ice palette with pale sky blue and lavender. */
-html.winter{--bg:#d7edf8;--accent:#96d9f2;background:#d7edf8}
-.winter body{background:radial-gradient(ellipse at 18% 0%,#ffffffdd,transparent 52%),radial-gradient(ellipse at 95% 22%,#ded5f5aa,transparent 50%),linear-gradient(155deg,#d3effa,#b9d9ed 60%,#dddaf1);color:#294d73}
-.winter header{color:#365e88;text-shadow:0 2px 16px #ffffffcc}
-.winter header::before{color:#577ba2}
-.winter .version{color:#56789c}
-.winter .winter-banner{color:#4b7295}
+html.winter{--bg:#5186ae;--accent:#b4eaff;background:#5186ae}
+.winter body{background:radial-gradient(ellipse at 18% 0%,#bce9ff66,transparent 52%),radial-gradient(ellipse at 95% 22%,#8c91cb55,transparent 50%),linear-gradient(155deg,#639fc5,#4479a5 60%,#697eac);color:#294d73}
+.winter header{color:#f1faff;text-shadow:0 2px 16px #234f7a55}
+.winter header::before{color:#d5edff}
+.winter .version{color:#daedfa}
+.winter .winter-banner{color:#e0f2ff}
 .winter-landscape::before{background:#ffffff;box-shadow:0 0 100px #ffffff;opacity:.55}
 .winter-landscape::after{background:linear-gradient(165deg,#ffffffaa,#e9efffaa);box-shadow:0 -25px 100px #ffffff66}
-.winter .card{background:linear-gradient(145deg,#ffffffe6,#e6f0fbe6);border-color:#ffffff;border-radius:20px;box-shadow:inset 0 1px 0 #fff,0 16px 48px #527da72b}
-.winter .left{background:radial-gradient(circle,#ffffff99,transparent 72%),linear-gradient(145deg,#e6f8ff,#cadff1);border-color:#fff}
+.winter .card{background:linear-gradient(145deg,#d7eaf8ee,#b4cfe8ee);border-color:#ffffff;border-radius:20px;box-shadow:inset 0 1px 0 #fff,0 16px 48px #527da72b}
+.winter .left{background:radial-gradient(circle,#90c6e744,transparent 72%),linear-gradient(145deg,#6a9fc2,#497ba5);border-color:#fff}
 .winter #wheel{filter:drop-shadow(0 0 16px #ffffffaa)}
 .winter textarea,.winter .spinInput{background:#f5fbff;border-color:#a5c5df;color:#294d73}
 .winter textarea::placeholder{color:#6384a3}
@@ -129,7 +129,7 @@ html.winter{--bg:#d7edf8;--accent:#96d9f2;background:#d7edf8}
 .winter ul.winners{background:#f5faff;border-color:#b8d2e6}
 .winter ul.winners li{border-color:#c2d7e9}
 .winter .toast{background:#edf7ff;border-color:#9bc8e5;color:#345c83}
-.winter #winnerOverlay{background:radial-gradient(ellipse at 50% 30%,#f2fcfff5,#bcdcf1f2 60%,#c3bfe5f5)}
+.winter #winnerOverlay{background:radial-gradient(ellipse at 50% 30%,#8ec7e4f5,#497facf2 60%,#697eb1f5)}
 .winter .winnerBox{border-color:#fff;background:linear-gradient(150deg,#ffffffed,#e9f1ffef);box-shadow:0 0 100px #ffffffaa,0 18px 60px #5c79a333}
 .winter .winnerLabel{color:#527ca4}
 .winter .winnerLabel::before{color:#78badc;text-shadow:0 0 24px #ffffff}
@@ -138,7 +138,7 @@ html.winter{--bg:#d7edf8;--accent:#96d9f2;background:#d7edf8}
 </style>
 </head>
 <body>
-<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261112-058</span></header>
+<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261112-059</span></header>
 <div class="halloween-scenery" aria-hidden="true"><span class="web"></span><span class="moon"></span><span class="bat">🦇</span><span class="bat second">🦇</span></div>
 <div class="halloween-banner"><strong>一週間だけの、ちょっと不思議な抽選会。</strong><br>10.31 — 11.06 ・ HALLOWEEN EDITION</div>
 
@@ -306,7 +306,7 @@ const ctx = canvas.getContext("2d");
 const size = canvas.width, r = size/2, center = {x:r,y:r};
 const NORMAL_COLORS = ["#ff4d6d","#f72585","#b5179e","#7209b7","#560bad","#480ca8","#3f37c9","#4361ee","#4895ef","#4cc9f0","#06d6a0","#ffd166","#ef476f","#ffd60a","#80ed99","#64dfdf","#72efdd","#56cfe1","#4ea8de","#a0c4ff"];
 const HALLOWEEN_COLORS = ["#9c461d","#653487","#a34a22","#36305f","#704391","#3c6145","#92404c","#51366e","#804a25","#324e60"];
-const WINTER_COLORS = ["#a6d9ed","#c5c5e9","#b7e4ef","#afc8e7","#a8cee9","#d2c5ea","#b6dcdf","#bdd3ed","#c5e6f2","#d8d2ed"];
+const WINTER_COLORS = ["#568faf","#7989b4","#579dac","#6385ac","#578fb9","#8b88b5","#609b9f","#6a92b7","#68a3bd","#9393bb"];
 let COLORS = winterActive ? WINTER_COLORS : halloweenActive ? HALLOWEEN_COLORS : NORMAL_COLORS;
 function syncHalloweenTheme(){
   const active = isHalloweenDate();
@@ -343,7 +343,7 @@ function drawWheel(){
     ctx.beginPath(); ctx.moveTo(0,0); ctx.arc(0,0,r-10,a0,a1,false);
     ctx.fillStyle = colorMap[arr[i]] || COLORS[i%COLORS.length]; ctx.fill();
     ctx.strokeStyle="#00000055"; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(0,0); ctx.arc(0,0,r-10,a0,a1,false); ctx.lineTo(0,0); ctx.stroke();
-    ctx.save(); ctx.fillStyle=winterActive ? "#345a80" : "#e9ecff"; ctx.rotate(a0 + step/2); ctx.textAlign="right"; ctx.font = "bold " + Math.max(10, Math.min(34, 820/n)) + "px system-ui"; ctx.fillText(arr[i]||"—", r-28, 8); ctx.restore();
+    ctx.save(); ctx.fillStyle=winterActive ? "#f1faff" : "#e9ecff"; ctx.rotate(a0 + step/2); ctx.textAlign="right"; ctx.font = "bold " + Math.max(10, Math.min(34, 820/n)) + "px system-ui"; ctx.fillText(arr[i]||"—", r-28, 8); ctx.restore();
   }
   ctx.lineWidth=10; ctx.strokeStyle="#ffffff22"; ctx.beginPath(); ctx.arc(0,0,r-6,0,Math.PI*2); ctx.stroke();
   ctx.restore();
