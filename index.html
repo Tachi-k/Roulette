@@ -76,8 +76,8 @@ html.halloween body{background:radial-gradient(ellipse at 12% 5%,#66323e66,trans
 
 /* Winter light, frost, and distant snowy hills. */
 .winter-banner,.winter-landscape{display:none}
-html.winter{--bg:#081b30;--accent:#bcefff;background:#081b30}
-.winter body{min-height:100vh;background:radial-gradient(ellipse at 50% -15%,#427b9d80,transparent 60%),linear-gradient(160deg,#183b57,#081b30 75%);color:#eaf8ff}
+html.winter{--bg:#35627f;--accent:#d8f7ff;background:#35627f}
+.winter body{min-height:100vh;background:radial-gradient(ellipse at 50% -15%,#b9eaff80,transparent 60%),linear-gradient(160deg,#609ab8,#315c7a 75%);color:#eaf8ff}
 .winter header{position:relative;padding:24px 16px 10px;font-size:27px;letter-spacing:.12em;color:#effcff}
 .winter header::before{content:'SNOW CRYSTAL';display:block;font-size:10px;letter-spacing:.4em;color:#a8d9ed;margin-bottom:10px}
 .winter .version{font-size:11px;color:#a7c9db;letter-spacing:.06em}
@@ -86,20 +86,20 @@ html.winter{--bg:#081b30;--accent:#bcefff;background:#081b30}
 .winter-landscape::before{content:'';position:absolute;width:90px;height:90px;right:10%;top:45px;border-radius:50%;background:#d9f5ff;box-shadow:0 0 80px #c0ecff40;opacity:.22}
 .winter-landscape::after{content:'';position:absolute;bottom:-60px;left:-10%;width:120%;height:32vh;background:linear-gradient(165deg,#bad8e522,#e5f8ff12);border-radius:50% 65% 0 0;transform:rotate(-6deg);box-shadow:0 -25px 100px #afdfff0d}
 .winter .app{position:relative;z-index:1}
-.winter .card{background:linear-gradient(145deg,#24465ddd,#102c43f2);border:1px solid #7095ac66;border-radius:20px;box-shadow:inset 0 1px 0 #e4f9ff22,0 18px 50px #0004}
-.winter .left{background:radial-gradient(circle,#609bb32b,transparent 70%),#102b42;padding:18px}
+.winter .card{background:linear-gradient(145deg,#4e7f9add,#315d7bf2);border:1px solid #7095ac66;border-radius:20px;box-shadow:inset 0 1px 0 #e4f9ff22,0 18px 50px #0004}
+.winter .left{background:radial-gradient(circle,#c4efff40,transparent 70%),#396e8b;padding:18px}
 .winter #wheel{filter:drop-shadow(0 0 18px #b8ecff20)}
-.winter textarea,.winter .spinInput{background:#0b2237;border-color:#51768e;color:#effaff}
+.winter textarea,.winter .spinInput{background:#244e6b;border-color:#90bbd0;color:#effaff}
 .winter textarea::placeholder{color:#a3bdcd;opacity:1}
 .winter .btn{background:linear-gradient(180deg,#bcefff,#75bddc);color:#0a2b43;box-shadow:0 6px 18px #82d6f222}
-.winter .btn.secondary{background:#365a73;color:#e8f8ff;box-shadow:none}
+.winter .btn.secondary{background:#527f9b;color:#e8f8ff;box-shadow:none}
 .winter .btn.danger{background:#684858;color:#fff1f5;box-shadow:none}
-.winter .tag{background:#1b405a;border-color:#719eb7;color:#d3f3ff}
-.winter ul.winners{background:#0b2237;border-color:#43647a}
+.winter .tag{background:#426f8b;border-color:#719eb7;color:#d3f3ff}
+.winter ul.winners{background:#2b5672;border-color:#79a2b9}
 .winter ul.winners li{border-color:#34556d}
 .winter .toast{background:#12344c;border-color:#8bcde3;color:#effcff}
-.winter #winnerOverlay{background:radial-gradient(ellipse at 50% 35%,#427997f2,#12334eef 65%,#07182cf5)}
-.winter .winnerBox{border-color:#b7eaff;background:linear-gradient(160deg,#23485cf5,#0e263cf5);box-shadow:0 0 90px #c4f3ff33}
+.winter #winnerOverlay{background:radial-gradient(ellipse at 50% 35%,#8cc4dcf2,#4a7f9bef 65%,#2b536ff5)}
+.winter .winnerBox{border-color:#b7eaff;background:linear-gradient(160deg,#568aa3f5,#315e7bf5);box-shadow:0 0 90px #c4f3ff33}
 .winter .winnerLabel{color:#d8f6ff}
 .winter .winnerLabel::before{content:'❄';display:block;font-size:64px;margin-bottom:12px;color:#b6ecff}
 .winter #winnerNameFull{color:#f1fcff;text-shadow:0 0 30px #adeaff80}
@@ -110,7 +110,7 @@ html.winter{--bg:#081b30;--accent:#bcefff;background:#081b30}
 </style>
 </head>
 <body>
-<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261112-055</span></header>
+<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261112-056</span></header>
 <div class="halloween-scenery" aria-hidden="true"><span class="web"></span><span class="moon"></span><span class="bat">🦇</span><span class="bat second">🦇</span></div>
 <div class="halloween-banner"><strong>一週間だけの、ちょっと不思議な抽選会。</strong><br>10.31 — 11.06 ・ HALLOWEEN EDITION</div>
 
@@ -278,7 +278,7 @@ const ctx = canvas.getContext("2d");
 const size = canvas.width, r = size/2, center = {x:r,y:r};
 const NORMAL_COLORS = ["#ff4d6d","#f72585","#b5179e","#7209b7","#560bad","#480ca8","#3f37c9","#4361ee","#4895ef","#4cc9f0","#06d6a0","#ffd166","#ef476f","#ffd60a","#80ed99","#64dfdf","#72efdd","#56cfe1","#4ea8de","#a0c4ff"];
 const HALLOWEEN_COLORS = ["#9c461d","#653487","#a34a22","#36305f","#704391","#3c6145","#92404c","#51366e","#804a25","#324e60"];
-const WINTER_COLORS = ["#326c8b","#5c739c","#397f91","#526787","#427caa","#656e9f","#367b7d","#4c6d94","#517c9a","#6b7297"];
+const WINTER_COLORS = ["#4d8eac","#788eb7","#559fac","#7185a8","#609bc2","#8b91bb","#549c9b","#6b8eaf","#749fb9","#9299bc"];
 let COLORS = winterActive ? WINTER_COLORS : halloweenActive ? HALLOWEEN_COLORS : NORMAL_COLORS;
 function syncHalloweenTheme(){
   const active = isHalloweenDate();
@@ -328,7 +328,7 @@ function drawWheel(){
       ctx.fillStyle=i%2 ? "#b8e8ff" : "#ffffff";
       ctx.beginPath(); ctx.arc(r+Math.cos(a)*(r-24),r+Math.sin(a)*(r-24),3,0,Math.PI*2); ctx.fill();
     }
-    ctx.fillStyle="#12364e"; ctx.beginPath(); ctx.arc(r,r,62,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle="#3c718e"; ctx.beginPath(); ctx.arc(r,r,62,0,Math.PI*2); ctx.fill();
     ctx.strokeStyle="#b8eaff"; ctx.lineWidth=3; ctx.stroke();
     ctx.fillStyle="#e1faff"; ctx.font="82px system-ui";
     ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText("❄",r,r+2);
@@ -356,6 +356,7 @@ const snowContext = snowCanvas.getContext("2d");
 let snowflakes = [];
 let snowLastTime = null;
 let winnerSnowRaf = null;
+let winnerSnowTimer = null;
 function startWinterSnow(){
   if(!winterActive) return;
   snowCanvas.width = innerWidth;
@@ -406,8 +407,12 @@ function startWinnerBlizzard(){
     winnerSnowRaf = requestAnimationFrame(frame);
   }
   frame(performance.now());
+  clearTimeout(winnerSnowTimer);
+  winnerSnowTimer = setTimeout(stopWinterSnow, 3000);
 }
 function stopWinterSnow(){
+  clearTimeout(winnerSnowTimer);
+  winnerSnowTimer = null;
   if(winnerSnowRaf !== null){
     cancelAnimationFrame(winnerSnowRaf);
     winnerSnowRaf = null;
