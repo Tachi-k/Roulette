@@ -104,12 +104,13 @@ html.winter{--bg:#081b30;--accent:#bcefff;background:#081b30}
 .winter .winnerLabel::before{content:'❄';display:block;font-size:64px;margin-bottom:12px;color:#b6ecff}
 .winter #winnerNameFull{color:#f1fcff;text-shadow:0 0 30px #adeaff80}
 .winter #winnerOverlay button{background:#bcefff;color:#12334b}
+#winterSnow.winner-snow{z-index:10002}
 #winterSnow{position:fixed;inset:0;width:100vw;height:100vh;max-width:none;pointer-events:none;z-index:3;display:none}
 @media(max-width:600px){.winter header{font-size:23px;padding-top:20px}.winter .left{padding:10px}.winter .winter-banner{font-size:11px;letter-spacing:.06em}}
 </style>
 </head>
 <body>
-<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261112-054</span></header>
+<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261112-055</span></header>
 <div class="halloween-scenery" aria-hidden="true"><span class="web"></span><span class="moon"></span><span class="bat">🦇</span><span class="bat second">🦇</span></div>
 <div class="halloween-banner"><strong>一週間だけの、ちょっと不思議な抽選会。</strong><br>10.31 — 11.06 ・ HALLOWEEN EDITION</div>
 
@@ -349,11 +350,12 @@ function drawWheel(){
   ctx.beginPath(); ctx.moveTo(r,20); ctx.lineTo(r-22,60); ctx.lineTo(r+22,60); ctx.closePath(); ctx.fillStyle=winterActive ? "#effcff" : "gold"; ctx.fill();
 }
 
-// Snow shares the wheel's animation frames and stops when the result is shown.
+// Snow uses the wheel frames during rotation, then continues over the winner overlay.
 const snowCanvas = document.getElementById("winterSnow");
 const snowContext = snowCanvas.getContext("2d");
 let snowflakes = [];
 let snowLastTime = null;
+let winnerSnowRaf = null;
 function startWinterSnow(){
   if(!winterActive) return;
   snowCanvas.width = innerWidth;
@@ -394,7 +396,23 @@ function drawWinterSnow(time, gust){
     }
   }
 }
+function startWinnerBlizzard(){
+  if(!winterActive) return;
+  if(winnerSnowRaf !== null) cancelAnimationFrame(winnerSnowRaf);
+  if(!snowflakes.length) startWinterSnow();
+  snowCanvas.classList.add("winner-snow");
+  function frame(time){
+    drawWinterSnow(time, 0.85 + 0.15*Math.sin(time/900));
+    winnerSnowRaf = requestAnimationFrame(frame);
+  }
+  frame(performance.now());
+}
 function stopWinterSnow(){
+  if(winnerSnowRaf !== null){
+    cancelAnimationFrame(winnerSnowRaf);
+    winnerSnowRaf = null;
+  }
+  snowCanvas.classList.remove("winner-snow");
   snowflakes = [];
   snowLastTime = null;
   snowContext.clearRect(0,0,snowCanvas.width,snowCanvas.height);
@@ -690,10 +708,12 @@ function openWinnerOverlay(name){
   winnerNameFull.textContent = name;
   winnerOverlay.style.display = "flex";
   winnerOverlay.setAttribute("aria-hidden", "false");
+  startWinnerBlizzard();
 }
 function closeWinnerOverlay(){
   winnerOverlay.style.display = "none";
   winnerOverlay.setAttribute("aria-hidden", "true");
+  if(!spinning) stopWinterSnow();
 }
 closeWinner.addEventListener("click", ()=>{ stopAllMusic(); closeWinnerOverlay(); });
 winnerOverlay.addEventListener("click", (e)=>{ if(e.target === winnerOverlay){ stopAllMusic(); closeWinnerOverlay(); } });
@@ -797,7 +817,6 @@ spinBtn.addEventListener("click", async ()=>{
       spinning = false;
       setControlsDisabled(false);
 
-      stopWinterSnow();
       stopWinterWind();
       stopBgm();
       playWinnerBgm();
