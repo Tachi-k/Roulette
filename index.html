@@ -76,7 +76,7 @@ html.halloween body{background:radial-gradient(ellipse at 12% 5%,#66323e66,trans
 </style>
 </head>
 <body>
-<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261112-052</span></header>
+<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261112-053</span></header>
 <div class="halloween-scenery" aria-hidden="true"><span class="web"></span><span class="moon"></span><span class="bat">🦇</span><span class="bat second">🦇</span></div>
 <div class="halloween-banner"><strong>一週間だけの、ちょっと不思議な抽選会。</strong><br>10.31 — 11.06 ・ HALLOWEEN EDITION</div>
 
@@ -328,8 +328,13 @@ let currentWinnerAudio = null;
 let currentWinnerSource = null;
 let winnerPlaybackId = 0;
 const winnerBufferCache = new Map();
-function getWinnerSoundUrl(){
+function getWinnerSoundUrl(now = Date.now()){
   syncHalloweenTheme();
+  const winterStart = Date.parse("2026-11-01T00:00:00+09:00");
+  const winterEnd = Date.parse("2027-01-01T00:00:00+09:00");
+  if(now >= winterStart && now < winterEnd){
+    return "./winter-victory-fanfare.mp3?v=20261112";
+  }
   return halloweenActive ? "./halloween-jackpot-fanfare.mp3?v=20261031" : "./brass-verdict.mp3?v=20260509-040";
 }
 function loadWinnerBuffer(url){
