@@ -76,7 +76,7 @@ html.halloween body{background:radial-gradient(ellipse at 12% 5%,#66323e66,trans
 </style>
 </head>
 <body>
-<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261111-051</span></header>
+<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261112-052</span></header>
 <div class="halloween-scenery" aria-hidden="true"><span class="web"></span><span class="moon"></span><span class="bat">🦇</span><span class="bat second">🦇</span></div>
 <div class="halloween-banner"><strong>一週間だけの、ちょっと不思議な抽選会。</strong><br>10.31 — 11.06 ・ HALLOWEEN EDITION</div>
 
@@ -296,12 +296,33 @@ function computeEndAngle(startAngle, targetAngle, extraTurns){
   return endAngle;
 }
 
-const bgm = new Audio("./tin-can-carnival.mp3?v=20260509-040");
+function defaultBgmForDate(now = Date.now()){
+  const winterStart = Date.parse("2026-11-01T00:00:00+09:00");
+  const winterEnd = Date.parse("2027-01-01T00:00:00+09:00");
+  return now >= winterStart && now < winterEnd
+    ? {src: "./snow-crystal-roulette.mp3?v=20261112", name: "Snow Crystal Roulette.mp3"}
+    : {src: "./tin-can-carnival.mp3?v=20260509-040", name: "tin-can-carnival.mp3"};
+}
+const bgm = new Audio(defaultBgmForDate().src);
 let bgmObjectUrl = null;
 bgm.loop = true;
 bgm.volume = 0.45;
 bgm.preload = "auto";
 bgm.load();
+
+function syncDefaultBgm(){
+  if(bgmObjectUrl) return;
+  const selected = defaultBgmForDate();
+  if(bgm.src !== new URL(selected.src, document.baseURI).href){
+    bgm.pause();
+    bgm.src = selected.src;
+    bgm.load();
+  }
+  document.getElementById("bgmName").textContent = "BGM：" + selected.name;
+}
+syncDefaultBgm();
+window.addEventListener("focus", syncDefaultBgm);
+document.addEventListener("visibilitychange", syncDefaultBgm);
 
 let currentWinnerAudio = null;
 let currentWinnerSource = null;
@@ -395,6 +416,7 @@ function playThunderIntro(){
 }
 
 function startBgm(){
+  syncDefaultBgm();
   bgm.pause();
   bgm.currentTime = 0;
   bgm.play().catch(err=>{
