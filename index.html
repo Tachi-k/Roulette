@@ -138,7 +138,7 @@ html.winter{--bg:#d7edf8;--accent:#96d9f2;background:#d7edf8}
 </style>
 </head>
 <body>
-<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261112-057</span></header>
+<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261112-058</span></header>
 <div class="halloween-scenery" aria-hidden="true"><span class="web"></span><span class="moon"></span><span class="bat">🦇</span><span class="bat second">🦇</span></div>
 <div class="halloween-banner"><strong>一週間だけの、ちょっと不思議な抽選会。</strong><br>10.31 — 11.06 ・ HALLOWEEN EDITION</div>
 
@@ -503,7 +503,7 @@ function computeEndAngle(startAngle, targetAngle, extraTurns){
 
 function defaultBgmForDate(now = Date.now()){
   return isWinterDate(now)
-    ? {src: "./snow-crystal-roulette.mp3?v=20261112", name: "Snow Crystal Roulette.mp3"}
+    ? {src: "./frozen-kingdom-roulette.mp3?v=20261112", name: "Frozen Kingdom Roulette.mp3"}
     : {src: "./tin-can-carnival.mp3?v=20260509-040", name: "tin-can-carnival.mp3"};
 }
 const bgm = new Audio(defaultBgmForDate().src);
