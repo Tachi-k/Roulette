@@ -138,7 +138,7 @@ html.winter{--bg:#5186ae;--accent:#b4eaff;background:#5186ae}
 </style>
 </head>
 <body>
-<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261113-060</span></header>
+<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261113-061</span></header>
 <div class="halloween-scenery" aria-hidden="true"><span class="web"></span><span class="moon"></span><span class="bat">🦇</span><span class="bat second">🦇</span></div>
 <div class="halloween-banner"><strong>一週間だけの、ちょっと不思議な抽選会。</strong><br>10.31 — 11.06 ・ HALLOWEEN EDITION</div>
 
@@ -391,7 +391,7 @@ function startWinterSnow(){
   snowCanvas.height = innerHeight;
   snowflakes = Array.from({length: innerWidth < 600 ? 65 : 110}, ()=>({
     x:Math.random()*innerWidth, y:Math.random()*innerHeight,
-    radius:0.65+Math.random()*1.35, speed:25+Math.random()*45, phase:Math.random()*Math.PI*2
+    radius:1.2+Math.random()*1.8, speed:25+Math.random()*45, phase:Math.random()*Math.PI*2
   }));
   snowLastTime = null;
   snowCanvas.style.display = "block";
@@ -406,7 +406,7 @@ function drawWinterSnow(time, gust){
   const dt = snowLastTime === null ? 0 : Math.min(0.05, (time-snowLastTime)/1000);
   snowLastTime = time;
   snowContext.clearRect(0,0,width,height);
-  snowContext.lineWidth = 0.8;
+  snowContext.lineWidth = 0.6;
   for(const flake of snowflakes){
     const drift = Math.sin(time/1400+flake.phase)*15 + gust*650;
     flake.x += drift*dt;
@@ -416,7 +416,7 @@ function drawWinterSnow(time, gust){
     if(flake.x < -16) flake.x=width+16;
     snowContext.fillStyle = "rgba(237,250,255,"+(0.5+gust*0.25)+")";
     snowContext.beginPath();
-    snowContext.arc(flake.x,flake.y,flake.radius*(1-0.35*gust),0,Math.PI*2);
+    snowContext.arc(flake.x,flake.y,flake.radius*(1-0.85*gust),0,Math.PI*2);
     snowContext.fill();
     if(gust > 0.1){
       snowContext.strokeStyle = "rgba(224,245,255,"+(gust*0.4)+")";
@@ -432,12 +432,12 @@ function startWinnerBlizzard(){
   snowCanvas.classList.add("winner-snow");
   const blizzardStart = performance.now();
   function frame(time){
-    drawWinterSnow(time, 0.9 + 0.1*Math.cos((time-blizzardStart)/900));
+    drawWinterSnow(time, 0.97 + 0.03*Math.cos((time-blizzardStart)/900));
     winnerSnowRaf = requestAnimationFrame(frame);
   }
   frame(performance.now());
   clearTimeout(winnerSnowTimer);
-  winnerSnowTimer = setTimeout(stopWinterSnow, 3000);
+  winnerSnowTimer = setTimeout(stopWinterSnow, 6000);
 }
 function stopWinterSnow(){
   clearTimeout(winnerSnowTimer);
@@ -826,8 +826,8 @@ spinBtn.addEventListener("click", async ()=>{
     const e = easeFunc(k);
     angle = startAngle + (endAngle - startAngle) * e;
     drawWheel();
-    const gustProgress = clamp((elapsed-(duration-1600))/1600,0,1);
-    if(winterActive && gustProgress > 0 && !gustStarted){
+    const gustProgress = clamp((elapsed-(duration-5000))/1000,0,1);
+    if(winterActive && elapsed >= duration-1600 && !gustStarted){
       gustStarted = true;
       playWinterWind();
     }
