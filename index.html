@@ -138,7 +138,7 @@ html.winter{--bg:#5186ae;--accent:#b4eaff;background:#5186ae}
 </style>
 </head>
 <body>
-<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261113-062</span></header>
+<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261113-063</span></header>
 <div class="halloween-scenery" aria-hidden="true"><span class="web"></span><span class="moon"></span><span class="bat">🦇</span><span class="bat second">🦇</span></div>
 <div class="halloween-banner"><strong>一週間だけの、ちょっと不思議な抽選会。</strong><br>10.31 — 11.06 ・ HALLOWEEN EDITION</div>
 
@@ -665,39 +665,28 @@ async function ensureAudio(){
   if(audioCtx.state !== "running"){ try{ await audioCtx.resume(); }catch(_){} }
   // The context is unlocked by the user's start tap; decode the file during rotation.
   loadWinnerBuffer(getWinnerSoundUrl()).catch(()=>{});
+  if(winterActive) loadWinnerBuffer("./ice-freeze-intro.mp3?v=20261113").catch(()=>{});
 }
-function playIceCracks(){
-  if(!winterActive || !audioCtx) return Promise.resolve();
-  const now = audioCtx.currentTime;
-  [0, 0.12, 0.29, 0.43, 0.65, 0.83].forEach((delay, index)=>{
-    const length = 0.045 + index*0.006;
-    const buffer = audioCtx.createBuffer(1, Math.ceil(audioCtx.sampleRate*length), audioCtx.sampleRate);
-    const samples = buffer.getChannelData(0);
-    for(let i=0;i<samples.length;i++) samples[i]=Math.random()*2-1;
-    const crack = audioCtx.createBufferSource();
-    const filter = audioCtx.createBiquadFilter();
-    const gain = audioCtx.createGain();
-    crack.buffer = buffer;
-    filter.type = "highpass";
-    filter.frequency.value = 1700 + index*220;
-    gain.gain.setValueAtTime(0.0001, now+delay);
-    gain.gain.exponentialRampToValueAtTime(0.24, now+delay+0.003);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now+delay+length);
-    crack.connect(filter); filter.connect(gain); gain.connect(masterGain);
-    crack.onended = ()=>{crack.disconnect();filter.disconnect();gain.disconnect();};
-    crack.start(now+delay); crack.stop(now+delay+length);
-    const ice = audioCtx.createOscillator();
-    const iceGain = audioCtx.createGain();
-    ice.type = "triangle";
-    ice.frequency.setValueAtTime(2600+index*170, now+delay);
-    ice.frequency.exponentialRampToValueAtTime(1000+index*70, now+delay+0.09);
-    iceGain.gain.setValueAtTime(0.045, now+delay);
-    iceGain.gain.exponentialRampToValueAtTime(0.0001, now+delay+0.12);
-    ice.connect(iceGain); iceGain.connect(masterGain);
-    ice.onended = ()=>{ice.disconnect();iceGain.disconnect();};
-    ice.start(now+delay); ice.stop(now+delay+0.13);
-  });
-  return new Promise(resolve=>setTimeout(resolve, 1100));
+async function playIceCracks(){
+  if(!winterActive || !audioCtx) return;
+  try{
+    const buffer = await loadWinnerBuffer("./ice-freeze-intro.mp3?v=20261113");
+    if(audioCtx.state !== "running") await audioCtx.resume();
+    await new Promise(resolve=>{
+      const source = audioCtx.createBufferSource();
+      const gain = audioCtx.createGain();
+      source.buffer = buffer;
+      gain.gain.value = 0.8;
+      source.connect(gain); gain.connect(masterGain);
+      source.onended = ()=>{
+        source.disconnect(); gain.disconnect();
+        resolve();
+      };
+      source.start();
+    });
+  }catch(error){
+    console.log("氷の開始音を再生できませんでした", error);
+  }
 }
 
 function beep(freq=1100, dur=0.06, vol=0.18){
@@ -829,7 +818,7 @@ spinBtn.addEventListener("click", async ()=>{
   stopAllMusic();
   await ensureAudio();
   await playThunderIntro();
-  if(winterActive) statusEl.textContent = "氷がピキピキ…まもなく回転開始";
+  if(winterActive) statusEl.textContent = "氷の魔法…まもなく回転開始";
   await playIceCracks();
   statusEl.textContent = "回転中…";
   startBgm();
