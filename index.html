@@ -104,7 +104,7 @@ html.winter{--bg:#35627f;--accent:#d8f7ff;background:#35627f}
 .winter .winnerLabel::before{content:'❄';display:block;font-size:64px;margin-bottom:12px;color:#b6ecff}
 .winter #winnerNameFull{color:#f1fcff;text-shadow:0 0 30px #adeaff80}
 .winter #winnerOverlay button{background:#bcefff;color:#12334b}
-#winterSnow.winner-snow{z-index:10002}
+#winterSnow.winner-snow{z-index:20001}
 #winterSnow{position:fixed;inset:0;width:100vw;height:100vh;max-width:none;pointer-events:none;z-index:3;display:none}
 @media(max-width:600px){.winter header{font-size:23px;padding-top:20px}.winter .left{padding:10px}.winter .winter-banner{font-size:11px;letter-spacing:.06em}}
 
@@ -138,7 +138,7 @@ html.winter{--bg:#5186ae;--accent:#b4eaff;background:#5186ae}
 </style>
 </head>
 <body>
-<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261113-061</span></header>
+<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261113-062</span></header>
 <div class="halloween-scenery" aria-hidden="true"><span class="web"></span><span class="moon"></span><span class="bat">🦇</span><span class="bat second">🦇</span></div>
 <div class="halloween-banner"><strong>一週間だけの、ちょっと不思議な抽選会。</strong><br>10.31 — 11.06 ・ HALLOWEEN EDITION</div>
 
@@ -406,7 +406,10 @@ function drawWinterSnow(time, gust){
   const dt = snowLastTime === null ? 0 : Math.min(0.05, (time-snowLastTime)/1000);
   snowLastTime = time;
   snowContext.clearRect(0,0,width,height);
-  snowContext.lineWidth = 0.6;
+  const foreground = snowCanvas.classList.contains("winner-snow");
+  snowContext.lineWidth = foreground ? 0.9 : 0.6;
+  snowContext.shadowColor = "#326ea6";
+  snowContext.shadowBlur = foreground ? 2 : 0;
   for(const flake of snowflakes){
     const drift = Math.sin(time/1400+flake.phase)*15 + gust*650;
     flake.x += drift*dt;
@@ -419,7 +422,9 @@ function drawWinterSnow(time, gust){
     snowContext.arc(flake.x,flake.y,flake.radius*(1-0.85*gust),0,Math.PI*2);
     snowContext.fill();
     if(gust > 0.1){
-      snowContext.strokeStyle = "rgba(224,245,255,"+(gust*0.4)+")";
+      snowContext.strokeStyle = foreground
+        ? "rgba(84,151,200,"+(gust*0.65)+")"
+        : "rgba(224,245,255,"+(gust*0.4)+")";
       snowContext.beginPath(); snowContext.moveTo(flake.x,flake.y);
       snowContext.lineTo(flake.x-gust*45,flake.y-gust*10); snowContext.stroke();
     }
@@ -661,6 +666,40 @@ async function ensureAudio(){
   // The context is unlocked by the user's start tap; decode the file during rotation.
   loadWinnerBuffer(getWinnerSoundUrl()).catch(()=>{});
 }
+function playIceCracks(){
+  if(!winterActive || !audioCtx) return Promise.resolve();
+  const now = audioCtx.currentTime;
+  [0, 0.12, 0.29, 0.43, 0.65, 0.83].forEach((delay, index)=>{
+    const length = 0.045 + index*0.006;
+    const buffer = audioCtx.createBuffer(1, Math.ceil(audioCtx.sampleRate*length), audioCtx.sampleRate);
+    const samples = buffer.getChannelData(0);
+    for(let i=0;i<samples.length;i++) samples[i]=Math.random()*2-1;
+    const crack = audioCtx.createBufferSource();
+    const filter = audioCtx.createBiquadFilter();
+    const gain = audioCtx.createGain();
+    crack.buffer = buffer;
+    filter.type = "highpass";
+    filter.frequency.value = 1700 + index*220;
+    gain.gain.setValueAtTime(0.0001, now+delay);
+    gain.gain.exponentialRampToValueAtTime(0.24, now+delay+0.003);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now+delay+length);
+    crack.connect(filter); filter.connect(gain); gain.connect(masterGain);
+    crack.onended = ()=>{crack.disconnect();filter.disconnect();gain.disconnect();};
+    crack.start(now+delay); crack.stop(now+delay+length);
+    const ice = audioCtx.createOscillator();
+    const iceGain = audioCtx.createGain();
+    ice.type = "triangle";
+    ice.frequency.setValueAtTime(2600+index*170, now+delay);
+    ice.frequency.exponentialRampToValueAtTime(1000+index*70, now+delay+0.09);
+    iceGain.gain.setValueAtTime(0.045, now+delay);
+    iceGain.gain.exponentialRampToValueAtTime(0.0001, now+delay+0.12);
+    ice.connect(iceGain); iceGain.connect(masterGain);
+    ice.onended = ()=>{ice.disconnect();iceGain.disconnect();};
+    ice.start(now+delay); ice.stop(now+delay+0.13);
+  });
+  return new Promise(resolve=>setTimeout(resolve, 1100));
+}
+
 function beep(freq=1100, dur=0.06, vol=0.18){
   if(!audioCtx) return;
   const t0 = audioCtx.currentTime;
@@ -790,6 +829,8 @@ spinBtn.addEventListener("click", async ()=>{
   stopAllMusic();
   await ensureAudio();
   await playThunderIntro();
+  if(winterActive) statusEl.textContent = "氷がピキピキ…まもなく回転開始";
+  await playIceCracks();
   statusEl.textContent = "回転中…";
   startBgm();
 
