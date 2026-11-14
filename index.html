@@ -140,7 +140,7 @@ html.winter{--bg:#5186ae;--accent:#b4eaff;background:#5186ae}
 .wheel-stage #wheel{display:block}
 .wheel-ice{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:2;display:none;filter:drop-shadow(0 0 10px #d7f6ff99)}
 .wheel-ice.active{display:block}
-.ice-shard{fill:url(#wheelIceGlass);stroke:#f4fcff;stroke-width:3;stroke-linejoin:round;transform-box:fill-box;transform-origin:center}
+.ice-shard{fill:url(#wheelIceGlass);stroke:#f4fcff;stroke-width:1.3;stroke-linejoin:round;transform-box:fill-box;transform-origin:center}
 .wheel-ice.active .ice-shard{animation:freezeAndShatter var(--ice-duration,4s) linear both}
 @keyframes freezeAndShatter{
   0%{opacity:0;transform:scale(.97);stroke-opacity:0}
@@ -148,12 +148,13 @@ html.winter{--bg:#5186ae;--accent:#b4eaff;background:#5186ae}
   45%{stroke-opacity:.3}
   72%{opacity:1;transform:translate(0,0) rotate(0deg);stroke-opacity:1}
   80%{opacity:1;transform:translate(0,0) rotate(0deg);stroke-opacity:1}
-  100%{opacity:0;transform:translate(var(--ice-x),var(--ice-y)) rotate(var(--ice-rotate))}
+  84%{opacity:1;transform:translate(var(--ice-pop-x),var(--ice-pop-y)) rotate(0deg) scale(.9)}
+  100%{opacity:0;transform:translate(var(--ice-x),var(--ice-y)) rotate(var(--ice-rotate)) scale(var(--ice-scale))}
 }
 </style>
 </head>
 <body>
-<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261114-064</span></header>
+<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261114-065</span></header>
 <div class="halloween-scenery" aria-hidden="true"><span class="web"></span><span class="moon"></span><span class="bat">🦇</span><span class="bat second">🦇</span></div>
 <div class="halloween-banner"><strong>一週間だけの、ちょっと不思議な抽選会。</strong><br>10.31 — 11.06 ・ HALLOWEEN EDITION</div>
 
@@ -167,15 +168,175 @@ html.winter{--bg:#5186ae;--accent:#b4eaff;background:#5186ae}
     <div class="wheel-stage">
       <canvas id="wheel" width="920" height="920"></canvas>
       <svg id="wheelIce" class="wheel-ice" viewBox="0 0 920 920" aria-hidden="true">
-        <defs><radialGradient id="wheelIceGlass"><stop offset="0" stop-color="#f3fdff" stop-opacity=".85"/><stop offset=".6" stop-color="#c8edff" stop-opacity=".75"/><stop offset="1" stop-color="#82c5e7" stop-opacity=".95"/></radialGradient></defs>
-        <path class="ice-shard" d="M460 460 L469.0 310.3 L452.9 175.1 L460.0 10.0 A450 450 0 0 1 778.2 141.8 L656.4 253.5 L572.2 360.5 Z" style="--ice-x:65px;--ice-y:-107px;--ice-rotate:-18deg"/>
-<path class="ice-shard" d="M460 460 L572.2 360.5 L656.4 253.5 L778.2 141.8 A450 450 0 0 1 910.0 460.0 L744.9 452.9 L609.7 469.0 Z" style="--ice-x:157px;--ice-y:-15px;--ice-rotate:18deg"/>
-<path class="ice-shard" d="M460 460 L609.7 469.0 L744.9 452.9 L910.0 460.0 A450 450 0 0 1 778.2 778.2 L666.5 656.4 L559.5 572.2 Z" style="--ice-x:157px;--ice-y:115px;--ice-rotate:-18deg"/>
-<path class="ice-shard" d="M460 460 L559.5 572.2 L666.5 656.4 L778.2 778.2 A450 450 0 0 1 460.0 910.0 L467.1 744.9 L451.0 609.7 Z" style="--ice-x:65px;--ice-y:207px;--ice-rotate:18deg"/>
-<path class="ice-shard" d="M460 460 L451.0 609.7 L467.1 744.9 L460.0 910.0 A450 450 0 0 1 141.8 778.2 L263.6 666.5 L347.8 559.5 Z" style="--ice-x:-65px;--ice-y:207px;--ice-rotate:-18deg"/>
-<path class="ice-shard" d="M460 460 L347.8 559.5 L263.6 666.5 L141.8 778.2 A450 450 0 0 1 10.0 460.0 L175.1 467.1 L310.3 451.0 Z" style="--ice-x:-157px;--ice-y:115px;--ice-rotate:18deg"/>
-<path class="ice-shard" d="M460 460 L310.3 451.0 L175.1 467.1 L10.0 460.0 A450 450 0 0 1 141.8 141.8 L253.5 263.6 L360.5 347.8 Z" style="--ice-x:-157px;--ice-y:-15px;--ice-rotate:-18deg"/>
-<path class="ice-shard" d="M460 460 L360.5 347.8 L253.5 263.6 L141.8 141.8 A450 450 0 0 1 460.0 10.0 L452.9 175.1 L469.0 310.3 Z" style="--ice-x:-65px;--ice-y:-107px;--ice-rotate:18deg"/>
+        <defs><radialGradient id="wheelIceGlass" gradientUnits="userSpaceOnUse" cx="460" cy="460" r="450"><stop offset="0" stop-color="#f3fdff" stop-opacity=".85"/><stop offset=".6" stop-color="#c8edff" stop-opacity=".75"/><stop offset="1" stop-color="#82c5e7" stop-opacity=".95"/></radialGradient></defs>
+        <path class="ice-shard" d="M460.0 460.0 L455.5 360.1 L483.2 354.6 Z" style="--ice-x:16px;--ice-y:-99px;--ice-pop-x:3px;--ice-pop-y:-17px;--ice-rotate:-110deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M460.0 460.0 L483.2 354.6 L511.5 360.7 Z" style="--ice-x:100px;--ice-y:-124px;--ice-pop-x:17px;--ice-pop-y:-21px;--ice-rotate:-37deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M460.0 460.0 L511.5 360.7 L534.2 378.8 Z" style="--ice-x:196px;--ice-y:-111px;--ice-pop-x:33px;--ice-pop-y:-19px;--ice-rotate:36deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M460.0 460.0 L534.2 378.8 L547.0 404.4 Z" style="--ice-x:287px;--ice-y:-63px;--ice-pop-x:49px;--ice-pop-y:-11px;--ice-rotate:109deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M460.0 460.0 L547.0 404.4 L550.4 431.4 Z" style="--ice-x:184px;--ice-y:43px;--ice-pop-x:31px;--ice-pop-y:7px;--ice-rotate:-38deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M460.0 460.0 L550.4 431.4 L548.9 456.0 Z" style="--ice-x:235px;--ice-y:86px;--ice-pop-x:40px;--ice-pop-y:15px;--ice-rotate:35deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M460.0 460.0 L548.9 456.0 L546.5 479.0 Z" style="--ice-x:276px;--ice-y:140px;--ice-pop-x:47px;--ice-pop-y:24px;--ice-rotate:108deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M460.0 460.0 L546.5 479.0 L543.2 503.2 Z" style="--ice-x:306px;--ice-y:201px;--ice-pop-x:52px;--ice-pop-y:34px;--ice-rotate:-39deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M460.0 460.0 L543.2 503.2 L535.3 528.8 Z" style="--ice-x:169px;--ice-y:180px;--ice-pop-x:29px;--ice-pop-y:31px;--ice-rotate:34deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M460.0 460.0 L535.3 528.8 L518.8 552.1 Z" style="--ice-x:185px;--ice-y:237px;--ice-pop-x:31px;--ice-pop-y:40px;--ice-rotate:107deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M460.0 460.0 L518.8 552.1 L493.8 566.8 Z" style="--ice-x:180px;--ice-y:308px;--ice-pop-x:31px;--ice-pop-y:52px;--ice-rotate:-40deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M460.0 460.0 L493.8 566.8 L464.9 568.7 Z" style="--ice-x:140px;--ice-y:387px;--ice-pop-x:24px;--ice-pop-y:66px;--ice-rotate:33deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M460.0 460.0 L464.9 568.7 L438.2 558.9 Z" style="--ice-x:28px;--ice-y:282px;--ice-pop-x:5px;--ice-pop-y:48px;--ice-rotate:106deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M460.0 460.0 L438.2 558.9 L417.1 542.7 Z" style="--ice-x:-48px;--ice-y:326px;--ice-pop-x:-8px;--ice-pop-y:55px;--ice-rotate:-41deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M460.0 460.0 L417.1 542.7 L400.4 525.2 Z" style="--ice-x:-157px;--ice-y:334px;--ice-pop-x:-27px;--ice-pop-y:57px;--ice-rotate:32deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M460.0 460.0 L400.4 525.2 L384.7 508.1 Z" style="--ice-x:-276px;--ice-y:287px;--ice-pop-x:-47px;--ice-pop-y:49px;--ice-rotate:105deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M460.0 460.0 L384.7 508.1 L368.9 488.9 Z" style="--ice-x:-204px;--ice-y:139px;--ice-pop-x:-35px;--ice-pop-y:24px;--ice-rotate:-42deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M460.0 460.0 L368.9 488.9 L356.1 464.7 Z" style="--ice-x:-259px;--ice-y:67px;--ice-pop-x:-44px;--ice-pop-y:11px;--ice-rotate:31deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M460.0 460.0 L356.1 464.7 L352.2 436.2 Z" style="--ice-x:-289px;--ice-y:-22px;--ice-pop-x:-49px;--ice-pop-y:-4px;--ice-rotate:104deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M460.0 460.0 L352.2 436.2 L360.8 408.5 Z" style="--ice-x:-295px;--ice-y:-114px;--ice-pop-x:-50px;--ice-pop-y:-19px;--ice-rotate:-43deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M460.0 460.0 L360.8 408.5 L380.8 387.6 Z" style="--ice-x:-157px;--ice-y:-74px;--ice-pop-x:-27px;--ice-pop-y:-13px;--ice-rotate:30deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M460.0 460.0 L380.8 387.6 L406.6 376.4 Z" style="--ice-x:-157px;--ice-y:-136px;--ice-pop-x:-27px;--ice-pop-y:-23px;--ice-rotate:103deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M460.0 460.0 L406.6 376.4 L432.3 372.7 Z" style="--ice-x:-143px;--ice-y:-200px;--ice-pop-x:-24px;--ice-pop-y:-34px;--ice-rotate:-44deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M460.0 460.0 L432.3 372.7 L455.5 360.1 Z" style="--ice-x:-54px;--ice-y:-93px;--ice-pop-x:-9px;--ice-pop-y:-16px;--ice-rotate:29deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M455.5 360.1 L469.5 248.5 L521.5 266.0 Z" style="--ice-x:-18px;--ice-y:-147px;--ice-pop-x:-3px;--ice-pop-y:-25px;--ice-rotate:102deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M455.5 360.1 L521.5 266.0 L483.2 354.6 Z" style="--ice-x:-13px;--ice-y:-195px;--ice-pop-x:-2px;--ice-pop-y:-33px;--ice-rotate:-45deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M483.2 354.6 L521.5 266.0 L566.9 292.8 Z" style="--ice-x:48px;--ice-y:-238px;--ice-pop-x:8px;--ice-pop-y:-40px;--ice-rotate:28deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M483.2 354.6 L566.9 292.8 L511.5 360.7 Z" style="--ice-x:50px;--ice-y:-102px;--ice-pop-x:9px;--ice-pop-y:-17px;--ice-rotate:101deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M511.5 360.7 L566.9 292.8 L607.0 325.7 Z" style="--ice-x:123px;--ice-y:-121px;--ice-pop-x:21px;--ice-pop-y:-21px;--ice-rotate:-46deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M511.5 360.7 L607.0 325.7 L534.2 378.8 Z" style="--ice-x:186px;--ice-y:-133px;--ice-pop-x:32px;--ice-pop-y:-23px;--ice-rotate:27deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M534.2 378.8 L607.0 325.7 L642.1 365.5 Z" style="--ice-x:282px;--ice-y:-92px;--ice-pop-x:48px;--ice-pop-y:-16px;--ice-rotate:100deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M534.2 378.8 L642.1 365.5 L547.0 404.4 Z" style="--ice-x:181px;--ice-y:3px;--ice-pop-x:31px;--ice-pop-y:1px;--ice-rotate:-47deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M547.0 404.4 L642.1 365.5 L668.6 414.1 Z" style="--ice-x:241px;--ice-y:44px;--ice-pop-x:41px;--ice-pop-y:7px;--ice-rotate:26deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M547.0 404.4 L668.6 414.1 L550.4 431.4 Z" style="--ice-x:290px;--ice-y:57px;--ice-pop-x:49px;--ice-pop-y:10px;--ice-rotate:99deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M550.4 431.4 L668.6 414.1 L680.0 469.9 Z" style="--ice-x:337px;--ice-y:108px;--ice-pop-x:57px;--ice-pop-y:18px;--ice-rotate:-48deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M550.4 431.4 L680.0 469.9 L548.9 456.0 Z" style="--ice-x:205px;--ice-y:94px;--ice-pop-x:35px;--ice-pop-y:16px;--ice-rotate:25deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M548.9 456.0 L680.0 469.9 L671.5 527.0 Z" style="--ice-x:249px;--ice-y:121px;--ice-pop-x:42px;--ice-pop-y:21px;--ice-rotate:98deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M548.9 456.0 L671.5 527.0 L546.5 479.0 Z" style="--ice-x:297px;--ice-y:118px;--ice-pop-x:50px;--ice-pop-y:20px;--ice-rotate:-49deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M546.5 479.0 L671.5 527.0 L643.4 577.2 Z" style="--ice-x:337px;--ice-y:157px;--ice-pop-x:57px;--ice-pop-y:27px;--ice-rotate:24deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M546.5 479.0 L643.4 577.2 L543.2 503.2 Z" style="--ice-x:207px;--ice-y:130px;--ice-pop-x:35px;--ice-pop-y:22px;--ice-rotate:97deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M543.2 503.2 L643.4 577.2 L601.4 614.8 Z" style="--ice-x:239px;--ice-y:183px;--ice-pop-x:41px;--ice-pop-y:31px;--ice-rotate:-50deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M543.2 503.2 L601.4 614.8 L535.3 528.8 Z" style="--ice-x:268px;--ice-y:229px;--ice-pop-x:46px;--ice-pop-y:39px;--ice-rotate:23deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M535.3 528.8 L601.4 614.8 L553.0 639.2 Z" style="--ice-x:255px;--ice-y:326px;--ice-pop-x:43px;--ice-pop-y:55px;--ice-rotate:96deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M535.3 528.8 L553.0 639.2 L518.8 552.1 Z" style="--ice-x:132px;--ice-y:257px;--ice-pop-x:22px;--ice-pop-y:44px;--ice-rotate:-51deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M518.8 552.1 L553.0 639.2 L502.6 653.4 Z" style="--ice-x:89px;--ice-y:333px;--ice-pop-x:15px;--ice-pop-y:57px;--ice-rotate:22deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M518.8 552.1 L502.6 653.4 L493.8 566.8 Z" style="--ice-x:56px;--ice-y:390px;--ice-pop-x:10px;--ice-pop-y:66px;--ice-rotate:95deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M493.8 566.8 L502.6 653.4 L451.0 659.9 Z" style="--ice-x:-16px;--ice-y:261px;--ice-pop-x:-3px;--ice-pop-y:44px;--ice-rotate:-52deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M493.8 566.8 L451.0 659.9 L464.9 568.7 Z" style="--ice-x:-41px;--ice-y:305px;--ice-pop-x:-7px;--ice-pop-y:52px;--ice-rotate:21deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M464.9 568.7 L451.0 659.9 L397.5 657.4 Z" style="--ice-x:-98px;--ice-y:338px;--ice-pop-x:-17px;--ice-pop-y:57px;--ice-rotate:94deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M464.9 568.7 L397.5 657.4 L438.2 558.9 Z" style="--ice-x:-115px;--ice-y:382px;--ice-pop-x:-20px;--ice-pop-y:65px;--ice-rotate:-53deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M438.2 558.9 L397.5 657.4 L344.0 641.5 Z" style="--ice-x:-87px;--ice-y:249px;--ice-pop-x:-15px;--ice-pop-y:42px;--ice-rotate:20deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M438.2 558.9 L344.0 641.5 L417.1 542.7 Z" style="--ice-x:-99px;--ice-y:295px;--ice-pop-x:-17px;--ice-pop-y:50px;--ice-rotate:93deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M417.1 542.7 L344.0 641.5 L296.8 609.2 Z" style="--ice-x:-143px;--ice-y:325px;--ice-pop-x:-24px;--ice-pop-y:55px;--ice-rotate:-54deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M417.1 542.7 L296.8 609.2 L400.4 525.2 Z" style="--ice-x:-165px;--ice-y:367px;--ice-pop-x:-28px;--ice-pop-y:62px;--ice-rotate:19deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M400.4 525.2 L296.8 609.2 L263.5 561.9 Z" style="--ice-x:-124px;--ice-y:234px;--ice-pop-x:-21px;--ice-pop-y:40px;--ice-rotate:92deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M400.4 525.2 L263.5 561.9 L384.7 508.1 Z" style="--ice-x:-168px;--ice-y:258px;--ice-pop-x:-29px;--ice-pop-y:44px;--ice-rotate:-55deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M384.7 508.1 L263.5 561.9 L249.1 506.5 Z" style="--ice-x:-245px;--ice-y:239px;--ice-pop-x:-42px;--ice-pop-y:41px;--ice-rotate:18deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M384.7 508.1 L249.1 506.5 L368.9 488.9 Z" style="--ice-x:-310px;--ice-y:217px;--ice-pop-x:-53px;--ice-pop-y:37px;--ice-rotate:91deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M368.9 488.9 L249.1 506.5 L252.5 450.7 Z" style="--ice-x:-204px;--ice-y:106px;--ice-pop-x:-35px;--ice-pop-y:18px;--ice-rotate:-56deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M368.9 488.9 L252.5 450.7 L356.1 464.7 Z" style="--ice-x:-253px;--ice-y:68px;--ice-pop-x:-43px;--ice-pop-y:12px;--ice-rotate:17deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M356.1 464.7 L252.5 450.7 L268.8 399.4 Z" style="--ice-x:-285px;--ice-y:-15px;--ice-pop-x:-48px;--ice-pop-y:-3px;--ice-rotate:90deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M356.1 464.7 L268.8 399.4 L352.2 436.2 Z" style="--ice-x:-314px;--ice-y:-67px;--ice-pop-x:-53px;--ice-pop-y:-11px;--ice-rotate:-57deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M352.2 436.2 L268.8 399.4 L293.1 353.4 Z" style="--ice-x:-172px;--ice-y:-47px;--ice-pop-x:-29px;--ice-pop-y:-8px;--ice-rotate:16deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M352.2 436.2 L293.1 353.4 L360.8 408.5 Z" style="--ice-x:-207px;--ice-y:-79px;--ice-pop-x:-35px;--ice-pop-y:-13px;--ice-rotate:89deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M360.8 408.5 L293.1 353.4 L324.1 311.3 Z" style="--ice-x:-220px;--ice-y:-136px;--ice-pop-x:-37px;--ice-pop-y:-23px;--ice-rotate:-58deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M360.8 408.5 L324.1 311.3 L380.8 387.6 Z" style="--ice-x:-263px;--ice-y:-158px;--ice-pop-x:-45px;--ice-pop-y:-27px;--ice-rotate:15deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M380.8 387.6 L324.1 311.3 L363.7 274.4 Z" style="--ice-x:-149px;--ice-y:-84px;--ice-pop-x:-25px;--ice-pop-y:-14px;--ice-rotate:88deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M380.8 387.6 L363.7 274.4 L406.6 376.4 Z" style="--ice-x:-186px;--ice-y:-114px;--ice-pop-x:-32px;--ice-pop-y:-19px;--ice-rotate:-59deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M406.6 376.4 L363.7 274.4 L413.3 247.9 Z" style="--ice-x:-184px;--ice-y:-177px;--ice-pop-x:-31px;--ice-pop-y:-30px;--ice-rotate:14deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M406.6 376.4 L413.3 247.9 L432.3 372.7 Z" style="--ice-x:-99px;--ice-y:-74px;--ice-pop-x:-17px;--ice-pop-y:-13px;--ice-rotate:87deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M432.3 372.7 L413.3 247.9 L469.5 248.5 Z" style="--ice-x:-78px;--ice-y:-136px;--ice-pop-x:-13px;--ice-pop-y:-23px;--ice-rotate:-60deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M432.3 372.7 L469.5 248.5 L455.5 360.1 Z" style="--ice-x:-56px;--ice-y:-191px;--ice-pop-x:-10px;--ice-pop-y:-32px;--ice-rotate:13deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M469.5 248.5 L445.3 133.7 L532.1 132.8 Z" style="--ice-x:9px;--ice-y:-244px;--ice-pop-x:2px;--ice-pop-y:-41px;--ice-rotate:86deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M469.5 248.5 L532.1 132.8 L521.5 266.0 Z" style="--ice-x:48px;--ice-y:-105px;--ice-pop-x:8px;--ice-pop-y:-18px;--ice-rotate:-61deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M521.5 266.0 L532.1 132.8 L617.0 157.4 Z" style="--ice-x:113px;--ice-y:-129px;--ice-pop-x:19px;--ice-pop-y:-22px;--ice-rotate:12deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M521.5 266.0 L617.0 157.4 L566.9 292.8 Z" style="--ice-x:179px;--ice-y:-142px;--ice-pop-x:30px;--ice-pop-y:-24px;--ice-rotate:85deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M566.9 292.8 L617.0 157.4 L690.4 207.9 Z" style="--ice-x:249px;--ice-y:-139px;--ice-pop-x:42px;--ice-pop-y:-24px;--ice-rotate:-62deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M566.9 292.8 L690.4 207.9 L607.0 325.7 Z" style="--ice-x:162px;--ice-y:-36px;--ice-pop-x:28px;--ice-pop-y:-6px;--ice-rotate:11deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M607.0 325.7 L690.4 207.9 L743.4 278.9 Z" style="--ice-x:211px;--ice-y:-47px;--ice-pop-x:36px;--ice-pop-y:-8px;--ice-rotate:84deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M607.0 325.7 L743.4 278.9 L642.1 365.5 Z" style="--ice-x:255px;--ice-y:-64px;--ice-pop-x:43px;--ice-pop-y:-11px;--ice-rotate:-63deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M642.1 365.5 L743.4 278.9 L772.8 360.9 Z" style="--ice-x:301px;--ice-y:-78px;--ice-pop-x:51px;--ice-pop-y:-13px;--ice-rotate:10deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M642.1 365.5 L772.8 360.9 L668.6 414.1 Z" style="--ice-x:185px;--ice-y:-12px;--ice-pop-x:31px;--ice-pop-y:-2px;--ice-rotate:83deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M668.6 414.1 L772.8 360.9 L780.5 445.6 Z" style="--ice-x:234px;--ice-y:-18px;--ice-pop-x:40px;--ice-pop-y:-3px;--ice-rotate:-64deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M668.6 414.1 L780.5 445.6 L680.0 469.9 Z" style="--ice-x:286px;--ice-y:-13px;--ice-pop-x:49px;--ice-pop-y:-2px;--ice-rotate:9deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M680.0 469.9 L780.5 445.6 L770.6 528.4 Z" style="--ice-x:343px;--ice-y:23px;--ice-pop-x:58px;--ice-pop-y:4px;--ice-rotate:82deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M680.0 469.9 L770.6 528.4 L671.5 527.0 Z" style="--ice-x:215px;--ice-y:82px;--ice-pop-x:37px;--ice-pop-y:14px;--ice-rotate:-65deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M671.5 527.0 L770.6 528.4 L745.0 607.9 Z" style="--ice-x:255px;--ice-y:142px;--ice-pop-x:43px;--ice-pop-y:24px;--ice-rotate:8deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M671.5 527.0 L745.0 607.9 L643.4 577.2 Z" style="--ice-x:277px;--ice-y:217px;--ice-pop-x:47px;--ice-pop-y:37px;--ice-rotate:81deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M643.4 577.2 L745.0 607.9 L702.6 681.7 Z" style="--ice-x:270px;--ice-y:312px;--ice-pop-x:46px;--ice-pop-y:53px;--ice-rotate:-66deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M643.4 577.2 L702.6 681.7 L601.4 614.8 Z" style="--ice-x:137px;--ice-y:256px;--ice-pop-x:23px;--ice-pop-y:44px;--ice-rotate:7deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M601.4 614.8 L702.6 681.7 L641.3 743.8 Z" style="--ice-x:121px;--ice-y:321px;--ice-pop-x:21px;--ice-pop-y:55px;--ice-rotate:80deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M601.4 614.8 L641.3 743.8 L553.0 639.2 Z" style="--ice-x:108px;--ice-y:378px;--ice-pop-x:18px;--ice-pop-y:64px;--ice-rotate:-67deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M553.0 639.2 L641.3 743.8 L563.2 785.7 Z" style="--ice-x:44px;--ice-y:259px;--ice-pop-x:7px;--ice-pop-y:44px;--ice-rotate:6deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M553.0 639.2 L563.2 785.7 L502.6 653.4 Z" style="--ice-x:47px;--ice-y:306px;--ice-pop-x:8px;--ice-pop-y:52px;--ice-rotate:79deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M502.6 653.4 L563.2 785.7 L475.3 800.4 Z" style="--ice-x:46px;--ice-y:354px;--ice-pop-x:8px;--ice-pop-y:60px;--ice-rotate:-68deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M502.6 653.4 L475.3 800.4 L451.0 659.9 Z" style="--ice-x:50px;--ice-y:401px;--ice-pop-x:9px;--ice-pop-y:68px;--ice-rotate:5deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M451.0 659.9 L475.3 800.4 L388.0 786.7 Z" style="--ice-x:19px;--ice-y:271px;--ice-pop-x:3px;--ice-pop-y:46px;--ice-rotate:78deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M451.0 659.9 L388.0 786.7 L397.5 657.4 Z" style="--ice-x:9px;--ice-y:319px;--ice-pop-x:2px;--ice-pop-y:54px;--ice-rotate:-69deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M397.5 657.4 L388.0 786.7 L309.8 749.5 Z" style="--ice-x:-25px;--ice-y:365px;--ice-pop-x:-4px;--ice-pop-y:62px;--ice-rotate:4deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M397.5 657.4 L309.8 749.5 L344.0 641.5 Z" style="--ice-x:-79px;--ice-y:403px;--ice-pop-x:-13px;--ice-pop-y:69px;--ice-rotate:77deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M344.0 641.5 L309.8 749.5 L244.4 695.9 Z" style="--ice-x:-88px;--ice-y:260px;--ice-pop-x:-15px;--ice-pop-y:44px;--ice-rotate:-70deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M344.0 641.5 L244.4 695.9 L296.8 609.2 Z" style="--ice-x:-154px;--ice-y:273px;--ice-pop-x:-26px;--ice-pop-y:46px;--ice-rotate:3deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M296.8 609.2 L244.4 695.9 L191.9 631.3 Z" style="--ice-x:-234px;--ice-y:258px;--ice-pop-x:-40px;--ice-pop-y:44px;--ice-rotate:76deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M296.8 609.2 L191.9 631.3 L263.5 561.9 Z" style="--ice-x:-309px;--ice-y:224px;--ice-pop-x:-53px;--ice-pop-y:38px;--ice-rotate:-71deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M263.5 561.9 L191.9 631.3 L152.5 557.4 Z" style="--ice-x:-203px;--ice-y:126px;--ice-pop-x:-35px;--ice-pop-y:21px;--ice-rotate:2deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M263.5 561.9 L152.5 557.4 L249.1 506.5 Z" style="--ice-x:-254px;--ice-y:101px;--ice-pop-x:-43px;--ice-pop-y:17px;--ice-rotate:75deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M249.1 506.5 L152.5 557.4 L129.7 474.9 Z" style="--ice-x:-302px;--ice-y:67px;--ice-pop-x:-51px;--ice-pop-y:11px;--ice-rotate:-72deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M249.1 506.5 L129.7 474.9 L252.5 450.7 Z" style="--ice-x:-347px;--ice-y:46px;--ice-pop-x:-59px;--ice-pop-y:8px;--ice-rotate:1deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M252.5 450.7 L129.7 474.9 L129.6 387.2 Z" style="--ice-x:-214px;--ice-y:48px;--ice-pop-x:-36px;--ice-pop-y:8px;--ice-rotate:74deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M252.5 450.7 L129.6 387.2 L268.8 399.4 Z" style="--ice-x:-260px;--ice-y:39px;--ice-pop-x:-44px;--ice-pop-y:7px;--ice-rotate:-73deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M268.8 399.4 L129.6 387.2 L156.5 302.5 Z" style="--ice-x:-304px;--ice-y:18px;--ice-pop-x:-52px;--ice-pop-y:3px;--ice-rotate:0deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M268.8 399.4 L156.5 302.5 L293.1 353.4 Z" style="--ice-x:-346px;--ice-y:-6px;--ice-pop-x:-59px;--ice-pop-y:-1px;--ice-rotate:73deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M293.1 353.4 L156.5 302.5 L209.3 230.9 Z" style="--ice-x:-210px;--ice-y:3px;--ice-pop-x:-36px;--ice-pop-y:1px;--ice-rotate:-74deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M293.1 353.4 L209.3 230.9 L324.1 311.3 Z" style="--ice-x:-240px;--ice-y:-45px;--ice-pop-x:-41px;--ice-pop-y:-8px;--ice-rotate:-1deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M324.1 311.3 L209.3 230.9 L280.9 179.7 Z" style="--ice-x:-248px;--ice-y:-119px;--ice-pop-x:-42px;--ice-pop-y:-20px;--ice-rotate:72deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M324.1 311.3 L280.9 179.7 L363.7 274.4 Z" style="--ice-x:-117px;--ice-y:-63px;--ice-pop-x:-20px;--ice-pop-y:-11px;--ice-rotate:-75deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M363.7 274.4 L280.9 179.7 L362.1 150.8 Z" style="--ice-x:-99px;--ice-y:-130px;--ice-pop-x:-17px;--ice-pop-y:-22px;--ice-rotate:-2deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M363.7 274.4 L362.1 150.8 L413.3 247.9 Z" style="--ice-x:-60px;--ice-y:-193px;--ice-pop-x:-10px;--ice-pop-y:-33px;--ice-rotate:71deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M413.3 247.9 L362.1 150.8 L445.3 133.7 Z" style="--ice-x:3px;--ice-y:-246px;--ice-pop-x:1px;--ice-pop-y:-42px;--ice-rotate:-76deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M413.3 247.9 L445.3 133.7 L469.5 248.5 Z" style="--ice-x:33px;--ice-y:-110px;--ice-pop-x:6px;--ice-pop-y:-19px;--ice-rotate:-3deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M445.3 133.7 L480.2 10.5 L595.9 31.0 Z" style="--ice-x:85px;--ice-y:-144px;--ice-pop-x:14px;--ice-pop-y:-24px;--ice-rotate:70deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M445.3 133.7 L595.9 31.0 L532.1 132.8 Z" style="--ice-x:106px;--ice-y:-187px;--ice-pop-x:18px;--ice-pop-y:-32px;--ice-rotate:-77deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M532.1 132.8 L595.9 31.0 L702.3 80.8 Z" style="--ice-x:160px;--ice-y:-213px;--ice-pop-x:27px;--ice-pop-y:-36px;--ice-rotate:-4deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M532.1 132.8 L702.3 80.8 L617.0 157.4 Z" style="--ice-x:88px;--ice-y:-101px;--ice-pop-x:15px;--ice-pop-y:-17px;--ice-rotate:69deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M617.0 157.4 L702.3 80.8 L792.2 156.4 Z" style="--ice-x:130px;--ice-y:-131px;--ice-pop-x:22px;--ice-pop-y:-22px;--ice-rotate:-78deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M617.0 157.4 L792.2 156.4 L690.4 207.9 Z" style="--ice-x:146px;--ice-y:-176px;--ice-pop-x:25px;--ice-pop-y:-30px;--ice-rotate:-5deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M690.4 207.9 L792.2 156.4 L859.4 252.8 Z" style="--ice-x:211px;--ice-y:-189px;--ice-pop-x:36px;--ice-pop-y:-32px;--ice-rotate:68deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M690.4 207.9 L859.4 252.8 L743.4 278.9 Z" style="--ice-x:136px;--ice-y:-78px;--ice-pop-x:23px;--ice-pop-y:-13px;--ice-rotate:-79deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M743.4 278.9 L859.4 252.8 L899.5 363.2 Z" style="--ice-x:208px;--ice-y:-70px;--ice-pop-x:35px;--ice-pop-y:-12px;--ice-rotate:-6deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M743.4 278.9 L899.5 363.2 L772.8 360.9 Z" style="--ice-x:267px;--ice-y:-63px;--ice-pop-x:45px;--ice-pop-y:-11px;--ice-rotate:67deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M772.8 360.9 L899.5 363.2 L909.5 480.2 Z" style="--ice-x:344px;--ice-y:14px;--ice-pop-x:58px;--ice-pop-y:2px;--ice-rotate:-80deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M772.8 360.9 L909.5 480.2 L780.5 445.6 Z" style="--ice-x:217px;--ice-y:75px;--ice-pop-x:37px;--ice-pop-y:13px;--ice-rotate:-7deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M780.5 445.6 L909.5 480.2 L889.0 595.9 Z" style="--ice-x:254px;--ice-y:152px;--ice-pop-x:43px;--ice-pop-y:26px;--ice-rotate:66deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M780.5 445.6 L889.0 595.9 L770.6 528.4 Z" style="--ice-x:286px;--ice-y:202px;--ice-pop-x:49px;--ice-pop-y:34px;--ice-rotate:-81deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M770.6 528.4 L889.0 595.9 L839.2 702.3 Z" style="--ice-x:289px;--ice-y:291px;--ice-pop-x:49px;--ice-pop-y:49px;--ice-rotate:-8deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M770.6 528.4 L839.2 702.3 L745.0 607.9 Z" style="--ice-x:177px;--ice-y:219px;--ice-pop-x:30px;--ice-pop-y:37px;--ice-rotate:65deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M745.0 607.9 L839.2 702.3 L763.6 792.2 Z" style="--ice-x:188px;--ice-y:276px;--ice-pop-x:32px;--ice-pop-y:47px;--ice-rotate:-82deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M745.0 607.9 L763.6 792.2 L702.6 681.7 Z" style="--ice-x:229px;--ice-y:302px;--ice-pop-x:39px;--ice-pop-y:51px;--ice-rotate:-9deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M702.6 681.7 L763.6 792.2 L667.2 859.4 Z" style="--ice-x:121px;--ice-y:222px;--ice-pop-x:21px;--ice-pop-y:38px;--ice-rotate:64deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M702.6 681.7 L667.2 859.4 L641.3 743.8 Z" style="--ice-x:158px;--ice-y:251px;--ice-pop-x:27px;--ice-pop-y:43px;--ice-rotate:-83deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M641.3 743.8 L667.2 859.4 L556.8 899.5 Z" style="--ice-x:163px;--ice-y:308px;--ice-pop-x:28px;--ice-pop-y:52px;--ice-rotate:-10deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M641.3 743.8 L556.8 899.5 L563.2 785.7 Z" style="--ice-x:184px;--ice-y:350px;--ice-pop-x:31px;--ice-pop-y:60px;--ice-rotate:63deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M563.2 785.7 L556.8 899.5 L439.8 909.5 Z" style="--ice-x:73px;--ice-y:260px;--ice-pop-x:12px;--ice-pop-y:44px;--ice-rotate:-84deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M563.2 785.7 L439.8 909.5 L475.3 800.4 Z" style="--ice-x:65px;--ice-y:312px;--ice-pop-x:11px;--ice-pop-y:53px;--ice-rotate:-11deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M475.3 800.4 L439.8 909.5 L324.1 889.0 Z" style="--ice-x:-6px;--ice-y:368px;--ice-pop-x:-1px;--ice-pop-y:63px;--ice-rotate:62deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M475.3 800.4 L324.1 889.0 L388.0 786.7 Z" style="--ice-x:-62px;--ice-y:409px;--ice-pop-x:-11px;--ice-pop-y:70px;--ice-rotate:-85deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M388.0 786.7 L324.1 889.0 L217.7 839.2 Z" style="--ice-x:-96px;--ice-y:258px;--ice-pop-x:-16px;--ice-pop-y:44px;--ice-rotate:-12deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M388.0 786.7 L217.7 839.2 L309.8 749.5 Z" style="--ice-x:-148px;--ice-y:281px;--ice-pop-x:-25px;--ice-pop-y:48px;--ice-rotate:61deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M309.8 749.5 L217.7 839.2 L127.8 763.6 Z" style="--ice-x:-229px;--ice-y:268px;--ice-pop-x:-39px;--ice-pop-y:46px;--ice-rotate:-86deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M309.8 749.5 L127.8 763.6 L244.4 695.9 Z" style="--ice-x:-278px;--ice-y:281px;--ice-pop-x:-47px;--ice-pop-y:48px;--ice-rotate:-13deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M244.4 695.9 L127.8 763.6 L60.6 667.2 Z" style="--ice-x:-187px;--ice-y:175px;--ice-pop-x:-32px;--ice-pop-y:30px;--ice-rotate:60deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M244.4 695.9 L60.6 667.2 L191.9 631.3 Z" style="--ice-x:-227px;--ice-y:201px;--ice-pop-x:-39px;--ice-pop-y:34px;--ice-rotate:-87deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M191.9 631.3 L60.6 667.2 L20.5 556.8 Z" style="--ice-x:-281px;--ice-y:196px;--ice-pop-x:-48px;--ice-pop-y:33px;--ice-rotate:-14deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M191.9 631.3 L20.5 556.8 L152.5 557.4 Z" style="--ice-x:-318px;--ice-y:228px;--ice-pop-x:-54px;--ice-pop-y:39px;--ice-rotate:59deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M152.5 557.4 L20.5 556.8 L10.5 439.8 Z" style="--ice-x:-207px;--ice-y:150px;--ice-pop-x:-35px;--ice-pop-y:26px;--ice-rotate:-88deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M152.5 557.4 L10.5 439.8 L129.7 474.9 Z" style="--ice-x:-251px;--ice-y:164px;--ice-pop-x:-43px;--ice-pop-y:28px;--ice-rotate:-15deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M129.7 474.9 L10.5 439.8 L31.0 324.1 Z" style="--ice-x:-309px;--ice-y:121px;--ice-pop-x:-53px;--ice-pop-y:21px;--ice-rotate:58deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M129.7 474.9 L31.0 324.1 L129.6 387.2 Z" style="--ice-x:-359px;--ice-y:94px;--ice-pop-x:-61px;--ice-pop-y:16px;--ice-rotate:-89deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M129.6 387.2 L31.0 324.1 L80.8 217.7 Z" style="--ice-x:-220px;--ice-y:27px;--ice-pop-x:-37px;--ice-pop-y:5px;--ice-rotate:-16deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M129.6 387.2 L80.8 217.7 L156.5 302.5 Z" style="--ice-x:-252px;--ice-y:-25px;--ice-pop-x:-43px;--ice-pop-y:-4px;--ice-rotate:57deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M156.5 302.5 L80.8 217.7 L156.4 127.8 Z" style="--ice-x:-244px;--ice-y:-127px;--ice-pop-x:-41px;--ice-pop-y:-22px;--ice-rotate:-90deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M156.5 302.5 L156.4 127.8 L209.3 230.9 Z" style="--ice-x:-122px;--ice-y:-62px;--ice-pop-x:-21px;--ice-pop-y:-11px;--ice-rotate:-17deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M209.3 230.9 L156.4 127.8 L252.8 60.6 Z" style="--ice-x:-100px;--ice-y:-131px;--ice-pop-x:-17px;--ice-pop-y:-22px;--ice-rotate:56deg;--ice-scale:0.27"/>
+<path class="ice-shard" d="M209.3 230.9 L252.8 60.6 L280.9 179.7 Z" style="--ice-x:-99px;--ice-y:-183px;--ice-pop-x:-17px;--ice-pop-y:-31px;--ice-rotate:-91deg;--ice-scale:0.33"/>
+<path class="ice-shard" d="M280.9 179.7 L252.8 60.6 L363.2 20.5 Z" style="--ice-x:-59px;--ice-y:-243px;--ice-pop-x:-10px;--ice-pop-y:-41px;--ice-rotate:-18deg;--ice-scale:0.39"/>
+<path class="ice-shard" d="M280.9 179.7 L363.2 20.5 L362.1 150.8 Z" style="--ice-x:-36px;--ice-y:-112px;--ice-pop-x:-6px;--ice-pop-y:-19px;--ice-rotate:55deg;--ice-scale:0.15"/>
+<path class="ice-shard" d="M362.1 150.8 L363.2 20.5 L480.2 10.5 Z" style="--ice-x:-19px;--ice-y:-161px;--ice-pop-x:-3px;--ice-pop-y:-27px;--ice-rotate:-92deg;--ice-scale:0.21"/>
+<path class="ice-shard" d="M362.1 150.8 L480.2 10.5 L445.3 133.7 Z" style="--ice-x:-36px;--ice-y:-207px;--ice-pop-x:-6px;--ice-pop-y:-35px;--ice-rotate:-19deg;--ice-scale:0.27"/>
       </svg>
     </div>
     <div id="errorOverlay">⚠️ 2名以上入力してください</div>
