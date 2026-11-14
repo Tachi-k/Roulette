@@ -154,7 +154,7 @@ html.winter{--bg:#5186ae;--accent:#b4eaff;background:#5186ae}
 </style>
 </head>
 <body>
-<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261114-066</span></header>
+<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261114-067</span></header>
 <div class="halloween-scenery" aria-hidden="true"><span class="web"></span><span class="moon"></span><span class="bat">🦇</span><span class="bat second">🦇</span></div>
 <div class="halloween-banner"><strong>一週間だけの、ちょっと不思議な抽選会。</strong><br>10.31 — 11.06 ・ HALLOWEEN EDITION</div>
 
@@ -856,39 +856,6 @@ async function ensureAudio(){
   loadWinnerBuffer(getWinnerSoundUrl()).catch(()=>{});
   if(winterActive) loadWinnerBuffer("./ice-freeze-intro.mp3?v=20261113").catch(()=>{});
 }
-function scheduleIceShatter(when){
-  const duration = 0.55;
-  const buffer = audioCtx.createBuffer(1, Math.ceil(audioCtx.sampleRate*duration), audioCtx.sampleRate);
-  const samples = buffer.getChannelData(0);
-  for(let i=0;i<samples.length;i++) samples[i]=Math.random()*2-1;
-  const noise = audioCtx.createBufferSource();
-  const filter = audioCtx.createBiquadFilter();
-  const gain = audioCtx.createGain();
-  noise.buffer = buffer;
-  filter.type = "highpass";
-  filter.frequency.value = 2200;
-  gain.gain.setValueAtTime(0.0001,when);
-  gain.gain.exponentialRampToValueAtTime(0.24,when+0.008);
-  gain.gain.exponentialRampToValueAtTime(0.0001,when+duration);
-  noise.connect(filter); filter.connect(gain); gain.connect(masterGain);
-  noise.onended=()=>{noise.disconnect();filter.disconnect();gain.disconnect();};
-  noise.start(when); noise.stop(when+duration);
-  [1900,2630,3170,3890,4570,5320,6110,6890].forEach((frequency,index)=>{
-    const start = when + index*0.018;
-    const tone = audioCtx.createOscillator();
-    const ring = audioCtx.createGain();
-    tone.type = "sine";
-    tone.frequency.setValueAtTime(frequency,start);
-    tone.frequency.exponentialRampToValueAtTime(frequency*0.72,start+0.38);
-    ring.gain.setValueAtTime(0.0001,start);
-    ring.gain.exponentialRampToValueAtTime(0.035,start+0.003);
-    ring.gain.exponentialRampToValueAtTime(0.0001,start+0.38);
-    tone.connect(ring); ring.connect(masterGain);
-    tone.onended=()=>{tone.disconnect();ring.disconnect();};
-    tone.start(start); tone.stop(start+0.38);
-  });
-}
-
 async function playIceCracks(){
   if(!winterActive || !audioCtx) return;
   try{
@@ -900,7 +867,7 @@ async function playIceCracks(){
       source.buffer = buffer;
       gain.gain.value = 0.8;
       const ice = document.getElementById("wheelIce");
-      ice.style.setProperty("--ice-duration", buffer.duration+"s");
+      ice.style.setProperty("--ice-duration", "1s");
       ice.classList.add("active");
       source.connect(gain); gain.connect(masterGain);
       source.onended = ()=>{
@@ -909,8 +876,8 @@ async function playIceCracks(){
         resolve();
       };
       const start = audioCtx.currentTime;
-      source.start(start);
-      scheduleIceShatter(start + buffer.duration*0.8);
+      // The ice bursts at 80% of its one-second animation.
+      source.start(start + 0.8);
     });
   }catch(error){
     document.getElementById("wheelIce").classList.remove("active");
