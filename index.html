@@ -135,10 +135,25 @@ html.winter{--bg:#5186ae;--accent:#b4eaff;background:#5186ae}
 .winter .winnerLabel::before{color:#78badc;text-shadow:0 0 24px #ffffff}
 .winter #winnerNameFull{color:#527eae;text-shadow:0 2px 0 #fff,0 0 30px #badff4}
 .winter #winnerOverlay button{background:linear-gradient(180deg,#b5e8fa,#9dc9eb);color:#2f537c}
+
+.wheel-stage{position:relative;width:100%;max-width:700px;flex-shrink:1}
+.wheel-stage #wheel{display:block}
+.wheel-ice{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:2;display:none;filter:drop-shadow(0 0 10px #d7f6ff99)}
+.wheel-ice.active{display:block}
+.ice-shard{fill:url(#wheelIceGlass);stroke:#f4fcff;stroke-width:3;stroke-linejoin:round;transform-box:fill-box;transform-origin:center}
+.wheel-ice.active .ice-shard{animation:freezeAndShatter var(--ice-duration,4s) linear both}
+@keyframes freezeAndShatter{
+  0%{opacity:0;transform:scale(.97);stroke-opacity:0}
+  12%{opacity:1;transform:scale(1);stroke-opacity:0}
+  45%{stroke-opacity:.3}
+  72%{opacity:1;transform:translate(0,0) rotate(0deg);stroke-opacity:1}
+  80%{opacity:1;transform:translate(0,0) rotate(0deg);stroke-opacity:1}
+  100%{opacity:0;transform:translate(var(--ice-x),var(--ice-y)) rotate(var(--ice-rotate))}
+}
 </style>
 </head>
 <body>
-<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261113-063</span></header>
+<header><span id="appTitle">ルーレット</span><br><span class="version">Software Version 20261114-064</span></header>
 <div class="halloween-scenery" aria-hidden="true"><span class="web"></span><span class="moon"></span><span class="bat">🦇</span><span class="bat second">🦇</span></div>
 <div class="halloween-banner"><strong>一週間だけの、ちょっと不思議な抽選会。</strong><br>10.31 — 11.06 ・ HALLOWEEN EDITION</div>
 
@@ -149,7 +164,20 @@ html.winter{--bg:#5186ae;--accent:#b4eaff;background:#5186ae}
 
 <div class="app">
   <div class="card left">
-    <canvas id="wheel" width="920" height="920"></canvas>
+    <div class="wheel-stage">
+      <canvas id="wheel" width="920" height="920"></canvas>
+      <svg id="wheelIce" class="wheel-ice" viewBox="0 0 920 920" aria-hidden="true">
+        <defs><radialGradient id="wheelIceGlass"><stop offset="0" stop-color="#f3fdff" stop-opacity=".85"/><stop offset=".6" stop-color="#c8edff" stop-opacity=".75"/><stop offset="1" stop-color="#82c5e7" stop-opacity=".95"/></radialGradient></defs>
+        <path class="ice-shard" d="M460 460 L469.0 310.3 L452.9 175.1 L460.0 10.0 A450 450 0 0 1 778.2 141.8 L656.4 253.5 L572.2 360.5 Z" style="--ice-x:65px;--ice-y:-107px;--ice-rotate:-18deg"/>
+<path class="ice-shard" d="M460 460 L572.2 360.5 L656.4 253.5 L778.2 141.8 A450 450 0 0 1 910.0 460.0 L744.9 452.9 L609.7 469.0 Z" style="--ice-x:157px;--ice-y:-15px;--ice-rotate:18deg"/>
+<path class="ice-shard" d="M460 460 L609.7 469.0 L744.9 452.9 L910.0 460.0 A450 450 0 0 1 778.2 778.2 L666.5 656.4 L559.5 572.2 Z" style="--ice-x:157px;--ice-y:115px;--ice-rotate:-18deg"/>
+<path class="ice-shard" d="M460 460 L559.5 572.2 L666.5 656.4 L778.2 778.2 A450 450 0 0 1 460.0 910.0 L467.1 744.9 L451.0 609.7 Z" style="--ice-x:65px;--ice-y:207px;--ice-rotate:18deg"/>
+<path class="ice-shard" d="M460 460 L451.0 609.7 L467.1 744.9 L460.0 910.0 A450 450 0 0 1 141.8 778.2 L263.6 666.5 L347.8 559.5 Z" style="--ice-x:-65px;--ice-y:207px;--ice-rotate:-18deg"/>
+<path class="ice-shard" d="M460 460 L347.8 559.5 L263.6 666.5 L141.8 778.2 A450 450 0 0 1 10.0 460.0 L175.1 467.1 L310.3 451.0 Z" style="--ice-x:-157px;--ice-y:115px;--ice-rotate:18deg"/>
+<path class="ice-shard" d="M460 460 L310.3 451.0 L175.1 467.1 L10.0 460.0 A450 450 0 0 1 141.8 141.8 L253.5 263.6 L360.5 347.8 Z" style="--ice-x:-157px;--ice-y:-15px;--ice-rotate:-18deg"/>
+<path class="ice-shard" d="M460 460 L360.5 347.8 L253.5 263.6 L141.8 141.8 A450 450 0 0 1 460.0 10.0 L452.9 175.1 L469.0 310.3 Z" style="--ice-x:-65px;--ice-y:-107px;--ice-rotate:18deg"/>
+      </svg>
+    </div>
     <div id="errorOverlay">⚠️ 2名以上入力してください</div>
   </div>
 
@@ -677,14 +705,19 @@ async function playIceCracks(){
       const gain = audioCtx.createGain();
       source.buffer = buffer;
       gain.gain.value = 0.8;
+      const ice = document.getElementById("wheelIce");
+      ice.style.setProperty("--ice-duration", buffer.duration+"s");
+      ice.classList.add("active");
       source.connect(gain); gain.connect(masterGain);
       source.onended = ()=>{
         source.disconnect(); gain.disconnect();
+        ice.classList.remove("active");
         resolve();
       };
       source.start();
     });
   }catch(error){
+    document.getElementById("wheelIce").classList.remove("active");
     console.log("氷の開始音を再生できませんでした", error);
   }
 }
@@ -818,7 +851,7 @@ spinBtn.addEventListener("click", async ()=>{
   stopAllMusic();
   await ensureAudio();
   await playThunderIntro();
-  if(winterActive) statusEl.textContent = "氷の魔法…まもなく回転開始";
+  if(winterActive) statusEl.textContent = "凍結中…氷が割れたら回転開始";
   await playIceCracks();
   statusEl.textContent = "回転中…";
   startBgm();
